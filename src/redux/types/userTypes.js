@@ -1,4 +1,6 @@
 
+
+export const ADD_USER = "ADD_USER";
 // Nuevos types para recuperación y reseteo de contraseña
 export const FORGOT_PASSWORD_REQUEST = "FORGOT_PASSWORD_REQUEST";
 export const FORGOT_PASSWORD_SUCCESS = "FORGOT_PASSWORD_SUCCESS";

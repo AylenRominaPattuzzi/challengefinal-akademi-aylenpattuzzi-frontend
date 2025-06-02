@@ -7,30 +7,40 @@ import Input from '../common/Input';
 import Button from '../common/Button';
 import FieldError from '../common/FieldError';
 
-
-const guardarTokenYRedirigir = (auth, navigate) => {
+const saveTokenAndRedirect = (auth, navigate) => {
   localStorage.setItem('token', auth.token);
   localStorage.setItem('role', auth.role);
   navigate('/dashboard');
 };
 
 const Login = ({ auth, loginUser }) => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fieldErrors, setFieldErrors] = useState({});
-
-  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
     if (auth && auth.token) {
-      guardarTokenYRedirigir(auth, navigate);
+      saveTokenAndRedirect(auth, navigate);
     }
   }, [auth, navigate]);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    if (auth.error) {
+      setErrorMsg(auth.error);
+      setIsLoading(false);
+    } else {
+      setErrorMsg(null);
+    }
+  }, [auth.error]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (auth.loading) return;
+    if (isLoading) return;
 
     const errors = validateLogin({ email, password });
     if (Object.keys(errors).length > 0) {
@@ -39,7 +49,18 @@ const Login = ({ auth, loginUser }) => {
     }
 
     setFieldErrors({});
-    loginUser({ email, password });
+    setIsLoading(true);
+    setErrorMsg(null);
+
+    try {
+      await loginUser({ email, password });
+      setEmail('');
+      setPassword('');
+    } catch (error) {
+      setErrorMsg(error.message || 'Error al iniciar sesión');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -49,7 +70,8 @@ const Login = ({ auth, loginUser }) => {
           <div className="content">
             <form className="ui form" onSubmit={handleSubmit} noValidate>
               <h2 className="ui header">Iniciar sesión</h2>
-              {auth.error && <div className="ui red message">{auth.error}</div>}
+              {errorMsg && <div className="ui red message">{errorMsg}</div>}
+
               <Input
                 label="Correo electrónico"
                 type="email"
@@ -74,8 +96,12 @@ const Login = ({ auth, loginUser }) => {
               />
               <FieldError message={fieldErrors.password} />
 
-              <Button type="submit" texto={auth.loading ? 'Cargando...' : 'Ingresar'} />
+              <Button type="submit" texto={isLoading ? 'Cargando...' : 'Ingresar'} disabled={isLoading} />
             </form>
+            <br />
+            <div >
+              <Link to="/register">Regístrate</Link>
+            </div>
 
             <div className="ui message">
               <Link to="/recover-password">¿Olvidaste tu contraseña?</Link>

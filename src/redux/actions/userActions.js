@@ -1,5 +1,6 @@
 import axiosInstance from "../../api/axiosInstance";
 import {
+  ADD_USER,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_FAILURE,
@@ -34,4 +35,9 @@ export const forgotPassword = (email) => async dispatch => {
         payload: error.response?.data?.message || 'Error al restablecer contraseña'
       });
     }
+  };
+
+  export const addUser = (formData) => async dispatch => {
+    const response = await axiosInstance.post("/auth/user/register", formData);
+    dispatch({ type: ADD_USER, payload: response.data });
   };

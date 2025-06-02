@@ -37,4 +37,24 @@ export const validateLogin = ({ email, password }) => {
   
     return errors;
   };
+
+
+  export const validateUser = (user = {}) => {
+    const errors = {};
+    const { name, email, password } = user;
+  
+    if (!name || name.trim() === '') {
+      errors.name = 'El nombre es obligatorio';
+    }
+  
+    if (!email || !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      errors.email = 'Debe ingresar un correo electrónico válido';
+    }
+  
+    if (!password || password.length < 8) {
+      errors.password = 'La contraseña debe tener al menos 8 caracteres';
+    }
+  
+    return errors;
+  };
   
