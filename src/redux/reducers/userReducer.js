@@ -1,5 +1,6 @@
 import {
   ADD_USER,
+  FETCH_USERS,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_FAILURE,
@@ -24,7 +25,8 @@ export default function userReducer(state = initialState, action) {
   switch (action.type) {
     case ADD_USER:
       return { ...state, users: [...state.users, action.payload] };
-
+    case FETCH_USERS:
+      return { ...state, users: action.payload };
     // RECOVER PASSWORD
     case FORGOT_PASSWORD_REQUEST:
       return { ...state, forgotPasswordLoading: true, forgotPasswordError: null, forgotPasswordSuccess: false };

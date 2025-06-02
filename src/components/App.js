@@ -6,6 +6,8 @@ import ForgotPassword from './User/ForgotPassword';
 import ResetPassword from './User/ResetPassword';
 import { checkAuthThunk } from '../redux/actions/authActions';
 import RegisterUser from './User/RegisterUser';
+import Dashboard from './Dashboard';
+import ListUsers from './User/ListUsers';
 
 
 
@@ -19,6 +21,10 @@ const App = () => {
   return (
     <div className="ui container">
       <Routes>
+        <Route path="/dashboard" element={<Dashboard />} />
+
+        <Route path="/list-users" element={<ListUsers />} />
+
         <Route path="/login" element={<Login />} />
         <Route path="/recover-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
