@@ -1,9 +1,9 @@
 import React from 'react'
-import Nadvar from './common/Nadvar'
+import ListUsers from './User/ListUsers'
 
 const Dashboard = () => {
   return (
-    <Nadvar/>
+    <ListUsers />
   )
 }
 

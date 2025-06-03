@@ -8,6 +8,7 @@ import { checkAuthThunk } from '../redux/actions/authActions';
 import RegisterUser from './User/RegisterUser';
 import Dashboard from './Dashboard';
 import ListUsers from './User/ListUsers';
+import UserDetail from './User/UserDetail';
 
 
 
@@ -21,15 +22,20 @@ const App = () => {
   return (
     <div className="ui container">
       <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
-
-        <Route path="/list-users" element={<ListUsers />} />
 
         <Route path="/login" element={<Login />} />
+
         <Route path="/recover-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
         <Route path="/register" element={<RegisterUser />} />
+
+        <Route path="/dashboard" element={<Dashboard />} />
+
+        <Route path="/list-users" element={<ListUsers />} />
+        <Route path="/user-detail/:id" element={<UserDetail />} />
+
+
       </Routes>
     </div>
   );
