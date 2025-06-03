@@ -51,7 +51,7 @@ export const validateLogin = ({ email, password }) => {
       errors.email = 'Debe ingresar un correo electrónico válido';
     }
   
-    if (!password || password.length < 8) {
+    if (user.password && user.password.length < 8) {
       errors.password = 'La contraseña debe tener al menos 8 caracteres';
     }
   

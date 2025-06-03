@@ -8,6 +8,9 @@ import {
   DELETE_USER_REQUEST,
   DELETE_USER_SUCCESS,
   DELETE_USER_FAILURE,
+  EDIT_USER_REQUEST,
+  EDIT_USER_SUCCESS,
+  EDIT_USER_FAILURE,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_FAILURE,
@@ -25,6 +28,7 @@ const initialState = {
     addUser: { loading: false, error: null, success: false },
     fetchUsers: { loading: false, error: null, success: false },
     deleteUser: { loading: false, error: null, success: false },
+    editUser: { loading: false, error: null, success: false },
     forgotPassword: { loading: false, error: null, success: false },
     resetPassword: { loading: false, error: null, success: false },
   },
@@ -64,26 +68,32 @@ export default function userReducer(state = initialState, action) {
     case FETCH_USERS_REQUEST:
       return {
         ...state,
-        fetchUsers: { loading: true, error: null, success: false },
+        operations: {
+          ...state.operations,
+          fetchUsers: { loading: true, error: null, success: false },
+        },
       };
 
     case FETCH_USERS_SUCCESS:
       return {
         ...state,
-        loading: false,
         users: action.payload.users,
-        total: action.payload.total,
-        page: action.payload.page,
-        limit: action.payload.limit,
         totalPages: action.payload.totalPages,
-        error: null,
+        currentPage: action.payload.page,
+        operations: {
+          ...state.operations,
+          fetchUsers: { loading: false, error: null, success: true },
+        },
       };
+
     case FETCH_USERS_FAILURE:
       return {
         ...state,
-        fetchUsers: { loading: false, error: action.payload, success: false },
+        operations: {
+          ...state.operations,
+          fetchUsers: { loading: false, error: action.payload, success: false },
+        },
       };
-
     case DELETE_USER_REQUEST:
       return {
         ...state,
@@ -109,6 +119,35 @@ export default function userReducer(state = initialState, action) {
         operations: {
           ...state.operations,
           deleteUser: { loading: false, error: action.payload, success: false },
+        },
+      };
+    case EDIT_USER_REQUEST:
+      return {
+        ...state,
+        operations: {
+          ...state.operations,
+          editUser: { loading: true, error: null, success: false },
+        },
+      };
+
+    case EDIT_USER_SUCCESS:
+      return {
+        ...state,
+        users: state.users.map((user) =>
+          user._id === action.payload._id ? action.payload : user
+        ),
+        operations: {
+          ...state.operations,
+          editUser: { loading: false, error: null, success: true },
+        },
+      };
+
+    case EDIT_USER_FAILURE:
+      return {
+        ...state,
+        operations: {
+          ...state.operations,
+          editUser: { loading: false, error: action.payload, success: false },
         },
       };
 

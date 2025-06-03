@@ -9,6 +9,9 @@ import {
   DELETE_USER_REQUEST,
   DELETE_USER_SUCCESS,
   DELETE_USER_FAILURE,
+  EDIT_USER_REQUEST,
+  EDIT_USER_SUCCESS,
+  EDIT_USER_FAILURE,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_FAILURE,
@@ -75,20 +78,22 @@ export const fetchUsers = ({ page = 1, role = '' } = {}) => async (dispatch) => 
     dispatch({
       type: FETCH_USERS_SUCCESS,
       payload: {
-        users: response.data.data,           
-        total: response.data.total,          
-        page: response.data.page,         
-        limit: response.data.limit,          
+        users: response.data.data,
+        total: response.data.total,
+        page: response.data.page,
+        limit: response.data.limit,
         totalPages: response.data.totalPages,
       },
     });
   } catch (error) {
+    console.error("Error al obtener usuarios:", error);
     dispatch({
       type: FETCH_USERS_FAILURE,
       payload: error.response?.data?.message || 'Error al obtener usuarios',
     });
   }
 };
+
 
 export const deleteUser = (id) => async (dispatch) => {
   dispatch({ type: DELETE_USER_REQUEST });
@@ -101,6 +106,21 @@ export const deleteUser = (id) => async (dispatch) => {
     dispatch({
       type: DELETE_USER_FAILURE,
       payload: error.response?.data?.message || 'Error al eliminar el usuario',
+    });
+  }
+};
+
+export const editUser = (id, updatedData) => async (dispatch) => {
+  dispatch({ type: EDIT_USER_REQUEST });
+
+  try {
+    const response = await axiosInstance.put(`/auth/user/users/${id}`, updatedData);
+    dispatch({ type: EDIT_USER_SUCCESS, payload: response.data });
+    dispatch(fetchUsers());
+  } catch (error) {
+    dispatch({
+      type: EDIT_USER_FAILURE,
+      payload: error.response?.data?.message || "Error al actualizar el usuario",
     });
   }
 };
