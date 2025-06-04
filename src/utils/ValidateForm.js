@@ -59,13 +59,18 @@ export const validateUser = ({ name, email, password, specialty } = {}) => {
     errors.password = 'La contraseña debe tener al menos 8 caracteres';
   }
 
+  return errors;
+};
+export const validateProfessor = ({ name, email, password, specialty } = {}) => {
+  const errors = validateUser({ name, email, password, specialty }) || {};
+
   if (!specialty || specialty.trim() === '') {
     errors.specialty = 'La especialidad es obligatoria';
   }
 
   return errors;
-};
 
+}
 // Validación de curso
 export const validateCourse = ({ title, startDate, endDate, capacity, category }) => {
   const errors = {};

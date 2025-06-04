@@ -55,7 +55,7 @@ export const addUser = (formData) => async (dispatch) => {
   dispatch({ type: ADD_USER_REQUEST });
 
   try {
-    const response = await axiosInstance.post("auth/register", formData);
+    const response = await axiosInstance.post("/auth/register", formData);
     dispatch({ type: ADD_USER_SUCCESS, payload: response.data });
   } catch (error) {
     dispatch({
@@ -73,7 +73,7 @@ export const fetchUsers = ({ page = 1, role = '' } = {}) => async (dispatch) => 
     if (page) params.page = page;
     if (role) params.role = role;
 
-    const response = await axiosInstance.get("/users", { params });
+    const response = await axiosInstance.get("/user", { params });
 
     dispatch({
       type: FETCH_USERS_SUCCESS,
@@ -99,7 +99,7 @@ export const deleteUser = (id) => async (dispatch) => {
   dispatch({ type: DELETE_USER_REQUEST });
 
   try {
-    await axiosInstance.delete(`/users/${id}`);
+    await axiosInstance.delete(`/user/${id}`);
     dispatch({ type: DELETE_USER_SUCCESS, payload: id });
     dispatch(fetchUsers());
   } catch (error) {
@@ -114,7 +114,7 @@ export const editUser = (id, updatedData) => async (dispatch) => {
   dispatch({ type: EDIT_USER_REQUEST });
 
   try {
-    const response = await axiosInstance.put(`/users/${id}`, updatedData);
+    const response = await axiosInstance.put(`/user/${id}`, updatedData);
     dispatch({ type: EDIT_USER_SUCCESS, payload: response.data });
     dispatch(fetchUsers());
   } catch (error) {
@@ -129,7 +129,7 @@ export const createProfessor = (formData) => async (dispatch) => {
   dispatch({ type: ADD_USER_REQUEST });
 
   try {
-    const response = await axiosInstance.post('/users', {
+    const response = await axiosInstance.post('/user', {
       ...formData,
       role: 'professor',
     });

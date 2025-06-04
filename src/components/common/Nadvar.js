@@ -41,7 +41,7 @@ const Navbar = ({ role, logoutUser }) => {
 
         {role === 'student' && (
           <>
-            <a className={`item ${isActive('/catalog')}`} href="/catalog">Catálogo</a>
+            <a className={`item ${isActive('/list-courses')}`} href="/list-courses">Cursos</a>
             <a className={`item ${isActive('/my-courses')}`} href="/my-courses">Mis Cursos</a>
             <a className={`item ${isActive('/my-grades')}`} href="/my-grades">Mis Calificaciones</a>
           </>

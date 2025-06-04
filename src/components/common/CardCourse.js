@@ -41,7 +41,7 @@ export const CardCourse = ({ course, onView, onDelete }) => {
       <div className="extra content">
       
         {courseId && (
-          <a className="ui blue basic button" href={`/courses/${courseId}`}>
+          <a className="ui blue basic button" href={`/curse-detail/${courseId}`}>
             <i className="eye icon"></i> Detalle
           </a>
         )}

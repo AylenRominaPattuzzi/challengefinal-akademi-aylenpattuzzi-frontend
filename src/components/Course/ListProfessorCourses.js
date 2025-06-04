@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getCoursesByProfessor } from '../../redux/actions/courseActions';
+import { getCoursesByProfessor, deleteCourse } from '../../redux/actions/courseActions';
 import { useNavigate } from 'react-router-dom';
-import { CardCourse } from '../common/CardCourse'; 
+import { CardCourse } from '../common/CardCourse';
 
-const ListCourse = ({ courses, getCoursesByProfessor, loading, error }) => {
+const ListProfessorCourses = ({ courses, getCoursesByProfessor, deleteCourse, loading, error }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,8 +16,9 @@ const ListCourse = ({ courses, getCoursesByProfessor, loading, error }) => {
   };
 
   const handleDeleteCourse = (course) => {
-    // Aquí iría la lógica para eliminar el curso
-    console.log('Eliminar curso:', course);
+    if (window.confirm(`¿Estás seguro de que querés eliminar el curso "${course.title}"?`)) {
+      deleteCourse(course._id);
+    }
   };
 
   if (loading) {
@@ -43,7 +44,7 @@ const ListCourse = ({ courses, getCoursesByProfessor, loading, error }) => {
       <div className="ui three stackable cards">
         {courses.map((course) => (
           <CardCourse 
-            key={course.id || course._id} 
+            key={course._id} 
             course={course} 
             onView={handleViewCourse} 
             onDelete={handleDeleteCourse} 
@@ -55,13 +56,14 @@ const ListCourse = ({ courses, getCoursesByProfessor, loading, error }) => {
 };
 
 const mapStateToProps = (state) => ({
-  courses: state.course.professorCourses,
-  loading: state.course.loadingProfessorCourses,
-  error: state.course.errorProfessorCourses,
+  courses: state.course.courses,
+  loading: state.course.operations.fetchCoursesByProfessor.loading,
+  error: state.course.operations.fetchCoursesByProfessor.error,
 });
 
 const mapDispatchToProps = {
   getCoursesByProfessor,
+  deleteCourse
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListCourse);
+export default connect(mapStateToProps, mapDispatchToProps)(ListProfessorCourses);

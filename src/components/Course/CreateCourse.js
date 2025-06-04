@@ -54,7 +54,7 @@ const CreateCourse = ({ createCourse }) => {
             setStudentsEnrolled('');
 
             alert('Curso creado con éxito');
-            navigate('/courses');
+            navigate('/my-courses');
         } catch (err) {
             const message = err?.response?.data?.message || 'Hubo un error al crear el curso';
             alert(message);

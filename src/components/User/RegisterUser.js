@@ -19,20 +19,29 @@ const RegisterUser = ({ addUser }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e) => {
+        console.log("s");
+        
         e.preventDefault();
+        console.log("prevent");
 
         if (isLoading) return;
+        console.log("loading");
 
         const errors = validateUser({ name, email, password });
+        console.log("validate");
 
         if (Object.keys(errors).length > 0) {
+            console.log(errors);
             setFieldErrors(errors);
             return;
         }
+        console.log("errors");
 
         setFieldErrors({});
         setIsLoading(true);
         try {
+            console.log("try");
+            
             await addUser({
                 name,
                 email,
@@ -43,6 +52,8 @@ const RegisterUser = ({ addUser }) => {
                     birthDate
                 }
             });
+            console.log("add");
+            
 
             setName('');
             setEmail('');

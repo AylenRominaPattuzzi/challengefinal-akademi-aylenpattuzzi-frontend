@@ -10,8 +10,9 @@ import UserDetail from './User/UserDetail';
 import Nadvar from './common/Nadvar';
 import RegisterProfessor from './User/RegisterProfessor';
 import CreateCourse from './Course/CreateCourse';
-import ListCourses from './Course/ListCourses';
 import ListProfessorCourses from './Course/ListProfessorCourses';
+import CourseDetail from './Course/CourseDetail';
+import ListCourses from './Course/ListCourses';
 
 
 
@@ -34,6 +35,8 @@ const App = () => {
 
         <Route path="/create-course" element={<CreateCourse />} />
         <Route path="/my-courses" element={<ListProfessorCourses />} />
+        <Route path="/curse-detail/:id" element={<CourseDetail />} />
+        <Route path="/list-courses" element={<ListCourses />} />
   
       </Routes>
     </div>

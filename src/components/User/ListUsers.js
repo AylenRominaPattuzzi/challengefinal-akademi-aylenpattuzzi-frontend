@@ -109,8 +109,7 @@ const ListUsers = ({
                                                     : '-'}
                                             </td>
                                             <td>
-                                                <button className="ui mini button" onClick={() => handleViewUser(user._id)}>Ver</button>
-                                                <button className="ui mini primary button" onClick={() => handleEditUser(user._id)}>Editar</button>
+                                                <button className="ui mini primary button" onClick={() => handleEditUser(user._id)}>Detalle</button>
                                                 <button
                                                     className={`ui mini negative button ${isDeletingUser ? 'loading disabled' : ''}`}
                                                     onClick={() => handleDeleteUser(user._id)}

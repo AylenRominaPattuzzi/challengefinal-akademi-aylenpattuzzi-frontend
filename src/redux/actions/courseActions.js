@@ -1,48 +1,96 @@
 import axiosInstance from '../../api/axiosInstance';
 import {
-    CREATE_COURSE_REQUEST,
-    CREATE_COURSE_SUCCESS,
-    CREATE_COURSE_FAILURE,
-    FETCH_COURSES_BY_PROFESSOR_REQUEST,
-    FETCH_COURSES_BY_PROFESSOR_SUCCESS,
-    FETCH_COURSES_BY_PROFESSOR_FAILURE,
+  CREATE_COURSE_REQUEST,
+  CREATE_COURSE_SUCCESS,
+  CREATE_COURSE_FAILURE,
+  FETCH_COURSES_BY_PROFESSOR_REQUEST,
+  FETCH_COURSES_BY_PROFESSOR_SUCCESS,
+  FETCH_COURSES_BY_PROFESSOR_FAILURE,
+  FETCH_COURSES_REQUEST,
+  FETCH_COURSES_SUCCESS,
+  FETCH_COURSES_FAILURE,
+  FETCH_COURSE_BY_ID_REQUEST,
+  FETCH_COURSE_BY_ID_SUCCESS,
+  FETCH_COURSE_BY_ID_FAILURE,
+  UPDATE_COURSE_REQUEST,
+  UPDATE_COURSE_SUCCESS,
+  UPDATE_COURSE_FAILURE,
+  DELETE_COURSE_REQUEST,
+  DELETE_COURSE_SUCCESS,
+  DELETE_COURSE_FAILURE,
 } from '../types/courseType';
 
-
+// Crear curso
 export const createCourse = (courseData) => async (dispatch) => {
-    dispatch({ type: CREATE_COURSE_REQUEST });
-
-    try {
-        const response = await axiosInstance.post('/courses', courseData);
-
-        dispatch({
-            type: CREATE_COURSE_SUCCESS,
-            payload: response.data,
-        });
-    } catch (error) {
-        dispatch({
-            type: CREATE_COURSE_FAILURE,
-            payload: error.response?.data?.message || 'Error al crear el curso',
-        });
-        throw error;
-    }
+  dispatch({ type: CREATE_COURSE_REQUEST });
+  try {
+    const response = await axiosInstance.post('/courses', courseData);
+    dispatch({ type: CREATE_COURSE_SUCCESS, payload: response.data });
+  } catch (error) {
+    dispatch({ type: CREATE_COURSE_FAILURE, payload: error.response?.data?.message || 'Error al crear el curso' });
+    throw error;
+  }
 };
 
+// Listar cursos de profesor
 export const getCoursesByProfessor = () => async (dispatch) => {
-    dispatch({ type: FETCH_COURSES_BY_PROFESSOR_REQUEST });
-  
-    try {
-      const response = await axiosInstance.get(`/courses/professor/`);
-  
-      dispatch({
-        type: FETCH_COURSES_BY_PROFESSOR_SUCCESS,
-        payload: response.data,
-      });
-    } catch (error) {
-      dispatch({
-        type: FETCH_COURSES_BY_PROFESSOR_FAILURE,
-        payload: error.response?.data?.message || 'Error al obtener cursos del profesor',
-      });
-    }
-  };
-  
+  dispatch({ type: FETCH_COURSES_BY_PROFESSOR_REQUEST });
+  try {
+    const response = await axiosInstance.get('/courses/professor');
+    dispatch({ type: FETCH_COURSES_BY_PROFESSOR_SUCCESS, payload: response.data });
+  } catch (error) {
+    dispatch({ type: FETCH_COURSES_BY_PROFESSOR_FAILURE, payload: error.response?.data?.message || 'Error al obtener cursos del profesor' });
+  }
+};
+
+// Listar todos los cursos
+export const getCourses = (queryParams = '') => async (dispatch) => {
+  dispatch({ type: FETCH_COURSES_REQUEST });
+  try {
+    const response = await axiosInstance.get(`/courses${queryParams}`);
+    console.log('getCourses response:', response.data);
+    dispatch({ type: FETCH_COURSES_SUCCESS, payload: response.data.data || response.data });
+  } catch (error) {
+    dispatch({ type: FETCH_COURSES_FAILURE, payload: error.response?.data?.message || 'Error al obtener cursos' });
+  }
+};
+
+// Obtener curso por ID
+export const getCourseById = (id) => async (dispatch) => {
+  console.log('getCourseById: iniciando con id =', id);
+  dispatch({ type: FETCH_COURSE_BY_ID_REQUEST });
+  try {
+    const response = await axiosInstance.get(`/courses/${id}`);
+    console.log('getCourseById: respuesta recibida:', response.data);
+    dispatch({ type: FETCH_COURSE_BY_ID_SUCCESS, payload: response.data });
+  } catch (error) {
+    console.error('getCourseById: error al obtener el curso:', error);
+    dispatch({ 
+      type: FETCH_COURSE_BY_ID_FAILURE, 
+      payload: error.response?.data?.message || 'Error al obtener el curso' 
+    });
+  }
+};
+
+
+// Actualizar curso
+export const updateCourse = (id, courseData) => async (dispatch) => {
+  dispatch({ type: UPDATE_COURSE_REQUEST });
+  try {
+    const response = await axiosInstance.put(`/courses/${id}`, courseData);
+    dispatch({ type: UPDATE_COURSE_SUCCESS, payload: response.data });
+  } catch (error) {
+    dispatch({ type: UPDATE_COURSE_FAILURE, payload: error.response?.data?.message || 'Error al actualizar el curso' });
+  }
+};
+
+// Eliminar curso
+export const deleteCourse = (id) => async (dispatch) => {
+  dispatch({ type: DELETE_COURSE_REQUEST });
+  try {
+    await axiosInstance.delete(`/courses/${id}`);
+    dispatch({ type: DELETE_COURSE_SUCCESS, payload: id });
+  } catch (error) {
+    dispatch({ type: DELETE_COURSE_FAILURE, payload: error.response?.data?.message || 'Error al eliminar el curso' });
+  }
+};
