@@ -1,9 +1,9 @@
 import React from 'react'
-import ListUsers from './User/ListUsers'
+
 
 const Dashboard = () => {
   return (
-    <ListUsers />
+    <h1>hola</h1>
   )
 }
 

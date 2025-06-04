@@ -25,7 +25,7 @@ export const forgotPassword = (email) => async (dispatch) => {
   dispatch({ type: FORGOT_PASSWORD_REQUEST });
 
   try {
-    await axiosInstance.post('auth/user/forgot-password', { email });
+    await axiosInstance.post('auth/forgot-password', { email });
     dispatch({ type: FORGOT_PASSWORD_SUCCESS });
   } catch (error) {
     dispatch({
@@ -40,7 +40,7 @@ export const resetPassword = (token, password) => async (dispatch) => {
   dispatch({ type: RESET_PASSWORD_REQUEST });
 
   try {
-    await axiosInstance.post(`auth/user/reset-password/${token}`, { password });
+    await axiosInstance.post(`auth/reset-password/${token}`, { password });
     dispatch({ type: RESET_PASSWORD_SUCCESS });
   } catch (error) {
     dispatch({
@@ -55,7 +55,7 @@ export const addUser = (formData) => async (dispatch) => {
   dispatch({ type: ADD_USER_REQUEST });
 
   try {
-    const response = await axiosInstance.post("/auth/user/register", formData);
+    const response = await axiosInstance.post("auth/register", formData);
     dispatch({ type: ADD_USER_SUCCESS, payload: response.data });
   } catch (error) {
     dispatch({
@@ -73,7 +73,7 @@ export const fetchUsers = ({ page = 1, role = '' } = {}) => async (dispatch) => 
     if (page) params.page = page;
     if (role) params.role = role;
 
-    const response = await axiosInstance.get("/auth/user/users", { params });
+    const response = await axiosInstance.get("/users", { params });
 
     dispatch({
       type: FETCH_USERS_SUCCESS,
@@ -99,7 +99,7 @@ export const deleteUser = (id) => async (dispatch) => {
   dispatch({ type: DELETE_USER_REQUEST });
 
   try {
-    await axiosInstance.delete(`/auth/user/users/${id}`);
+    await axiosInstance.delete(`/users/${id}`);
     dispatch({ type: DELETE_USER_SUCCESS, payload: id });
     dispatch(fetchUsers());
   } catch (error) {
@@ -114,7 +114,7 @@ export const editUser = (id, updatedData) => async (dispatch) => {
   dispatch({ type: EDIT_USER_REQUEST });
 
   try {
-    const response = await axiosInstance.put(`/auth/user/users/${id}`, updatedData);
+    const response = await axiosInstance.put(`/users/${id}`, updatedData);
     dispatch({ type: EDIT_USER_SUCCESS, payload: response.data });
     dispatch(fetchUsers());
   } catch (error) {
@@ -122,5 +122,24 @@ export const editUser = (id, updatedData) => async (dispatch) => {
       type: EDIT_USER_FAILURE,
       payload: error.response?.data?.message || "Error al actualizar el usuario",
     });
+  }
+};
+
+export const createProfessor = (formData) => async (dispatch) => {
+  dispatch({ type: ADD_USER_REQUEST });
+
+  try {
+    const response = await axiosInstance.post('/users', {
+      ...formData,
+      role: 'professor',
+    });
+
+    dispatch({ type: ADD_USER_SUCCESS, payload: response.data });
+  } catch (error) {
+    dispatch({
+      type: ADD_USER_FAILURE,
+      payload: error.response?.data?.message || 'Error al registrar profesor',
+    });
+    throw error;
   }
 };

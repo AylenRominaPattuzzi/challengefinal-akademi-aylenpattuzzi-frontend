@@ -11,7 +11,7 @@ export const loginUser = (credentials) => async (dispatch) => {
     dispatch({ type: LOGIN_REQUEST });
 
     try {
-        const response = await axiosInstance.post('auth/user/login', credentials);
+        const response = await axiosInstance.post('auth/login', credentials);
         const { token, role } = response.data;
 
         localStorage.setItem("token", token);
@@ -29,28 +29,4 @@ export const logoutUser = () => async (dispatch) => {
     localStorage.removeItem("role");
 
     dispatch({ type: LOGOUT });
-};
-
-// Verificar sesión activa desde localStorage
-export const checkAuth = () => async (dispatch) => {
-    const token = localStorage.getItem("token");
-    const role = localStorage.getItem("role");
-
-    if (token) {
-        dispatch({ type: LOGIN_SUCCESS, payload: { token, role } });
-    } else {
-        dispatch({ type: LOGOUT });
-    }
-};
-
-// Thunk para verificar si hay sesión activa
-export const checkAuthThunk = () => async (dispatch) => {
-    const token = localStorage.getItem("token");
-    const role = localStorage.getItem("role");
-
-    if (token) {
-        dispatch({ type: LOGIN_SUCCESS, payload: { token, role } });
-    } else {
-        dispatch({ type: LOGOUT });
-    }
 };

@@ -1,41 +1,40 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Login from './User/Login';
 import ForgotPassword from './User/ForgotPassword';
 import ResetPassword from './User/ResetPassword';
-import { checkAuthThunk } from '../redux/actions/authActions';
 import RegisterUser from './User/RegisterUser';
 import Dashboard from './Dashboard';
 import ListUsers from './User/ListUsers';
 import UserDetail from './User/UserDetail';
+import Nadvar from './common/Nadvar';
+import RegisterProfessor from './User/RegisterProfessor';
+import CreateCourse from './Course/CreateCourse';
+import ListCourses from './Course/ListCourses';
+import ListProfessorCourses from './Course/ListProfessorCourses';
 
 
 
 const App = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(checkAuthThunk());
-  }, [dispatch]);
 
   return (
     <div className="ui container">
+      <Nadvar />
       <Routes>
+        <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="/login" element={<Login />} />
-
         <Route path="/recover-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-
         <Route path="/register" element={<RegisterUser />} />
-
-        <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="/list-users" element={<ListUsers />} />
         <Route path="/user-detail/:id" element={<UserDetail />} />
+        <Route path="/create-professor" element={<RegisterProfessor />} />
 
-
+        <Route path="/create-course" element={<CreateCourse />} />
+        <Route path="/my-courses" element={<ListProfessorCourses />} />
+  
       </Routes>
     </div>
   );

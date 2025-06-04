@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:5000",
@@ -16,6 +17,18 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   error => Promise.reject(error)
+);
+
+axiosInstance.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem('token');
+      const navigate = useNavigate();
+      navigate('/login');
+    }
+    return Promise.reject(error);
+  }
 );
 
 
