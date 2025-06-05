@@ -16,6 +16,7 @@ import ListCourses from './Course/ListCourses';
 import ListGrades from './Grades/ListGrades';
 import ListStudentCourses from './Course/ListStudentCourses';
 import ListStudentGrades from './Grades/ListStudentGrades';
+import CreateGrade from './Grades/CreateGrade';
 
 
 
@@ -45,6 +46,9 @@ const App = () => {
 
         <Route path="/student/my-courses" element={<ListStudentCourses />} />
         <Route path="/student/my-grades" element={<ListStudentGrades />} />
+
+        <Route path="/professor/student/:studentId/grade" element={<CreateGrade />} />
+
   
       </Routes>
     </div>
