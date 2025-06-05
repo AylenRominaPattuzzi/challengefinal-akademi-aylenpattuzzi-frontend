@@ -12,6 +12,10 @@ const ListProfessorCourses = ({ courses, getCoursesByProfessor, deleteCourse, lo
   }, [getCoursesByProfessor]);
 
   const handleViewCourse = (id) => {
+    navigate(`/professor/grades/${id}`);
+  };
+
+  const handleEditCourse = (id) => {
     navigate(`/course-detail/${id}`);
   };
 
@@ -43,11 +47,13 @@ const ListProfessorCourses = ({ courses, getCoursesByProfessor, deleteCourse, lo
       <h2 className="ui header">Cursos</h2>
       <div className="ui three stackable cards">
         {courses.map((course) => (
-          <CardCourse 
-            key={course._id} 
-            course={course} 
-            onView={handleViewCourse} 
-            onDelete={handleDeleteCourse} 
+          <CardCourse
+            key={course._id}
+            course={course}
+            onView={handleViewCourse}
+            onEdit={handleEditCourse}
+            onDelete={handleDeleteCourse}
+            hideEnrollButton={true}
           />
         ))}
       </div>

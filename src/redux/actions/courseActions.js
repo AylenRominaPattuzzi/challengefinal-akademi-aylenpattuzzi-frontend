@@ -49,7 +49,7 @@ export const getCoursesByProfessor = () => async (dispatch) => {
 export const getCoursesByStudent = () => async (dispatch) => {
   dispatch({ type: FETCH_COURSES_BY_STUDENT_REQUEST });
   try {
-    const response = await axiosInstance.get('/courses/student/my-courses'); 
+    const response = await axiosInstance.get('/enrollments/my-courses'); 
     dispatch({ type: FETCH_COURSES_BY_STUDENT_SUCCESS, payload: response.data });
   } catch (error) {
     dispatch({

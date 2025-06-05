@@ -12,7 +12,8 @@ const ListCourses = ({
   enrollments,
   loading,
   error,
-  studentId
+  studentId,
+  role
 }) => {
   const navigate = useNavigate();
 
@@ -61,6 +62,7 @@ const ListCourses = ({
             onView={handleViewCourse}
             isEnrolled={isEnrolled(course._id)}
             onEnroll={() => handleEnroll(course._id)}
+            hideEnrollButton={(role !== 'student')}
           />
         ))}
       </div>
@@ -74,6 +76,7 @@ const mapStateToProps = (state) => ({
   error: state.course.operations.fetchCourses.error,
   enrollments: state.enrollment.myEnrollments,
   studentId: state.auth.user?._id, 
+  role: state.auth.role,
 });
 
 const mapDispatchToProps = {

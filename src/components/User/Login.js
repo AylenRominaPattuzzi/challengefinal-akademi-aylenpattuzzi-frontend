@@ -6,11 +6,37 @@ import { validateLogin } from '../../utils/ValidateForm';
 import Input from '../common/Input';
 import Button from '../common/Button';
 import FieldError from '../common/FieldError';
+import {jwtDecode} from 'jwt-decode';
 
 const saveTokenAndRedirect = (auth, navigate) => {
   localStorage.setItem('token', auth.token);
   localStorage.setItem('role', auth.role);
-  navigate('/dashboard');
+  switch (auth.role) {
+    case 'student':
+      navigate('/student/my-courses');
+      break;
+    case 'professor':
+      navigate('/professor/my-courses');
+      break
+    case 'superadmin':
+      navigate('/dashboard');
+      break
+    default:
+      navigate('/');
+      break;
+  }
+  
+};
+
+const isTokenExpired = (token) => {
+  try {
+    const decoded = jwtDecode(token);
+    if (!decoded.exp) return true;
+    const now = Date.now() / 1000; 
+    return decoded.exp < now;
+  } catch (e) {
+    return true;
+  }
 };
 
 const Login = ({ auth, loginUser }) => {
@@ -23,7 +49,7 @@ const Login = ({ auth, loginUser }) => {
   const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
-    if (auth && auth.token) {
+    if (auth && auth.token && !isTokenExpired(auth.token)) {
       saveTokenAndRedirect(auth, navigate);
     }
   }, [auth, navigate]);

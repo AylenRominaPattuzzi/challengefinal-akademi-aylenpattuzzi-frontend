@@ -65,13 +65,14 @@ export const addUser = (formData) => async (dispatch) => {
   }
 };
 
-export const fetchUsers = ({ page = 1, role = '' } = {}) => async (dispatch) => {
+export const fetchUsers = ({ page = 1, role = '', search = '' } = {}) => async (dispatch) => {
   dispatch({ type: FETCH_USERS_REQUEST });
 
   try {
     const params = {};
     if (page) params.page = page;
     if (role) params.role = role;
+    if (search) params.search = search;
 
     const response = await axiosInstance.get("/user", { params });
 

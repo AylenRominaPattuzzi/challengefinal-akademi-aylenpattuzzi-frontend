@@ -34,7 +34,7 @@ const Navbar = ({ role, logoutUser }) => {
           <>
             <a className={`item ${isActive('/professor/my-courses')}`} href="/professor/my-courses">Mis Cursos</a>
             <a className={`item ${isActive('/professor/create-course')}`} href="/professor/create-course">Crear Curso</a>
-            <a className={`item ${isActive('/professor/grades')}`} href="/professor/grades">Calificaciones</a>
+            {/* <a className={`item ${isActive('/professor/grades')}`} href="/professor/grades">Calificaciones</a> */}
           </>
         )}
 
@@ -42,7 +42,7 @@ const Navbar = ({ role, logoutUser }) => {
           <>
             <a className={`item ${isActive('/student/list-courses')}`} href="/student/list-courses">Cursos</a>
             <a className={`item ${isActive('/student/my-courses')}`} href="/student/my-courses">Mis Cursos</a>
-            <a className={`item ${isActive('/student/my-grades')}`} href="/student/my-grades">Mis Calificaciones</a>
+            <a className={`item ${isActive('/student/my-grades')}`} href="/student/my-grades">Mis Calificaciones</a> 
           </>
         )}
 

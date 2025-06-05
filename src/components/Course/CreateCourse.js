@@ -17,6 +17,7 @@ const CreateCourse = ({ createCourse }) => {
     const [capacity, setCapacity] = useState('');
     const [category, setCategory] = useState('');
     const [studentsEnrolled, setStudentsEnrolled] = useState('');
+    const [price, setPrice] = useState(''); 
     const [fieldErrors, setFieldErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
 
@@ -24,7 +25,8 @@ const CreateCourse = ({ createCourse }) => {
         e.preventDefault();
         if (isLoading) return;
 
-        const errors = validateCourse({ title, description, startDate, endDate, capacity, category });
+        // Incluye price en la validación
+        const errors = validateCourse({ title, description, startDate, endDate, capacity, category, price });
         if (Object.keys(errors).length > 0) {
             setFieldErrors(errors);
             return;
@@ -41,7 +43,8 @@ const CreateCourse = ({ createCourse }) => {
                 endDate,
                 capacity: parseInt(capacity, 10),
                 category,
-                studentsEnrolled: studentsEnrolled ? parseInt(studentsEnrolled, 10) : 0
+                studentsEnrolled: studentsEnrolled ? parseInt(studentsEnrolled, 10) : 0,
+                price: parseFloat(price)  // <-- Envía precio parseado a número decimal
             });
 
             // Limpiar campos
@@ -52,6 +55,7 @@ const CreateCourse = ({ createCourse }) => {
             setCapacity('');
             setCategory('');
             setStudentsEnrolled('');
+            setPrice('');  // <-- limpiar precio
 
             alert('Curso creado con éxito');
             navigate('/professor/my-courses');
@@ -71,6 +75,7 @@ const CreateCourse = ({ createCourse }) => {
                         <form className="ui form" onSubmit={handleSubmit} noValidate>
                             <h2 className="ui header">Crear Curso</h2>
 
+                            {/* Campos existentes */}
                             <Input
                                 label='Título'
                                 type='text'
@@ -140,6 +145,20 @@ const CreateCourse = ({ createCourse }) => {
                                 }}
                             />
                             <FieldError message={fieldErrors.category} />
+
+                            {/* Nuevo campo precio */}
+                            <Input
+                                label='Precio'
+                                type='number'
+                                step='0.01'
+                                placeholder='Ingrese el precio'
+                                value={price}
+                                onChange={(e) => {
+                                    setPrice(e.target.value);
+                                    setFieldErrors((prev) => ({ ...prev, price: '' }));
+                                }}
+                            />
+                            <FieldError message={fieldErrors.price} />
 
                             <Button
                                 type="submit"

@@ -15,10 +15,11 @@ const ListUsers = ({
     const navigate = useNavigate();
     const [page, setPage] = useState(currentPage || 1);
     const [role, setRole] = useState('');
+    const [search, setSearch] = useState('')
 
     useEffect(() => {
-        fetchUsers({ page, role });
-    }, [fetchUsers, page, role]);
+        fetchUsers({ page, role, search });
+    }, [fetchUsers, page, role, search]);
 
     const handleViewUser = (id) => {
         navigate(`/user-detail/${id}`);
@@ -74,6 +75,16 @@ const ListUsers = ({
                                     <option value="student">ESTUDIANTE</option>
                                     <option value="professor">PROFESOR</option>
                                 </select>
+                            </div>
+                            <div className='field'>
+                                <input
+                                className="ui"
+                                value={search}
+                                    onChange={(e) => {
+                                        setSearch(e.target.value);
+                                        setPage(1); // reset al cambiar filtro
+                                    }}
+                                ></input>
                             </div>
                         </div>
 
