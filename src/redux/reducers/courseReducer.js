@@ -11,6 +11,9 @@ import {
     FETCH_COURSE_BY_ID_REQUEST,
     FETCH_COURSE_BY_ID_SUCCESS,
     FETCH_COURSE_BY_ID_FAILURE,
+    FETCH_COURSES_BY_STUDENT_REQUEST,
+    FETCH_COURSES_BY_STUDENT_SUCCESS,
+    FETCH_COURSES_BY_STUDENT_FAILURE,
     UPDATE_COURSE_REQUEST,
     UPDATE_COURSE_SUCCESS,
     UPDATE_COURSE_FAILURE,
@@ -26,6 +29,7 @@ const initialState = {
         createCourse: { loading: false, error: null, success: false },
         fetchCourses: { loading: false, error: null, success: false },
         fetchCoursesByProfessor: { loading: false, error: null, success: false },
+        fetchCoursesByStudent: { loading: false, error: null, success: false }, // 👈 AGREGAR ESTO
         fetchCourseById: { loading: false, error: null, success: false },
         updateCourse: { loading: false, error: null, success: false },
         deleteCourse: { loading: false, error: null, success: false },
@@ -61,7 +65,6 @@ export default function courseReducer(state = initialState, action) {
                 },
             };
 
-        // FETCH ALL COURSES
         case FETCH_COURSES_REQUEST:
             return {
                 ...state,
@@ -88,7 +91,6 @@ export default function courseReducer(state = initialState, action) {
                 },
             };
 
-        // FETCH BY PROFESSOR
         case FETCH_COURSES_BY_PROFESSOR_REQUEST:
             return {
                 ...state,
@@ -114,8 +116,32 @@ export default function courseReducer(state = initialState, action) {
                     fetchCoursesByProfessor: { loading: false, error: action.payload, success: false },
                 },
             };
+        case FETCH_COURSES_BY_STUDENT_REQUEST:
+            return {
+                ...state,
+                operations: {
+                    ...state.operations,
+                    fetchCourses: { loading: true, error: null, success: false },
+                },
+            };
+        case FETCH_COURSES_BY_STUDENT_SUCCESS:
+            return {
+                ...state,
+                courses: action.payload,
+                operations: {
+                    ...state.operations,
+                    fetchCourses: { loading: false, error: null, success: true },
+                },
+            };
+        case FETCH_COURSES_BY_STUDENT_FAILURE:
+            return {
+                ...state,
+                operations: {
+                    ...state.operations,
+                    fetchCourses: { loading: false, error: action.payload, success: false },
+                },
+            };
 
-        // FETCH BY ID
         case FETCH_COURSE_BY_ID_REQUEST:
             return {
                 ...state,
@@ -142,7 +168,7 @@ export default function courseReducer(state = initialState, action) {
                 },
             };
 
-        // UPDATE
+
         case UPDATE_COURSE_REQUEST:
             return {
                 ...state,
@@ -171,7 +197,7 @@ export default function courseReducer(state = initialState, action) {
                 },
             };
 
-        // DELETE
+
         case DELETE_COURSE_REQUEST:
             return {
                 ...state,

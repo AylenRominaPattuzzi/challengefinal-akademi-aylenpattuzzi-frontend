@@ -12,6 +12,9 @@ import {
   FETCH_COURSE_BY_ID_REQUEST,
   FETCH_COURSE_BY_ID_SUCCESS,
   FETCH_COURSE_BY_ID_FAILURE,
+  FETCH_COURSES_BY_STUDENT_REQUEST,
+  FETCH_COURSES_BY_STUDENT_SUCCESS,
+  FETCH_COURSES_BY_STUDENT_FAILURE,
   UPDATE_COURSE_REQUEST,
   UPDATE_COURSE_SUCCESS,
   UPDATE_COURSE_FAILURE,
@@ -40,6 +43,19 @@ export const getCoursesByProfessor = () => async (dispatch) => {
     dispatch({ type: FETCH_COURSES_BY_PROFESSOR_SUCCESS, payload: response.data });
   } catch (error) {
     dispatch({ type: FETCH_COURSES_BY_PROFESSOR_FAILURE, payload: error.response?.data?.message || 'Error al obtener cursos del profesor' });
+  }
+};
+
+export const getCoursesByStudent = () => async (dispatch) => {
+  dispatch({ type: FETCH_COURSES_BY_STUDENT_REQUEST });
+  try {
+    const response = await axiosInstance.get('/courses/student/my-courses'); 
+    dispatch({ type: FETCH_COURSES_BY_STUDENT_SUCCESS, payload: response.data });
+  } catch (error) {
+    dispatch({
+      type: FETCH_COURSES_BY_STUDENT_FAILURE,
+      payload: error.response?.data?.message || 'Error al obtener cursos del estudiante',
+    });
   }
 };
 

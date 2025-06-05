@@ -60,7 +60,7 @@ const CourseDetail = ({
         setDisabled(true);
         const timer = setTimeout(() => {
           setShowSuccessMessage(false);
-          navigate('/my-courses');
+          navigate('/professor/my-courses');
         }, 2000);
         return () => clearTimeout(timer);
       }
@@ -94,7 +94,7 @@ const CourseDetail = ({
   
       setTimeout(() => {
         setShowSuccessMessage(false);
-        navigate('/my-courses');
+        navigate('/professor/');
       }, 2000);
     } catch (err) {
 

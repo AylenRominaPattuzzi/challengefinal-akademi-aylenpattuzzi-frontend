@@ -19,38 +19,36 @@ const Navbar = ({ role, logoutUser }) => {
   return (
     <div className="ui container">
       <div className="ui secondary pointing menu">
- 
+
 
         {role === 'superadmin' && (
           <>
             <a className={`item ${isActive('/dashboard')}`} href="/dashboard">Página Principal</a>
             <a className={`item ${isActive('/list-users')}`} href="/list-users">Usuarios</a>
             <a className={`item ${isActive('/create-professor')}`} href="/create-professor">Crear Profesor</a>
-            <a className={`item ${isActive('/courses')}`} href="/courses">Cursos</a>
-            <a className={`item ${isActive('/statistics')}`} href="/statistics">Estadísticas</a>
           </>
         )}
 
         {role === 'professor' && (
           <>
-            <a className={`item ${isActive('/my-courses')}`} href="/my-courses">Mis Cursos</a>
-            <a className={`item ${isActive('/create-course')}`} href="/create-course">Crear Curso</a>
-            <a className={`item ${isActive('/grades')}`} href="/grades">Calificaciones</a>
+            <a className={`item ${isActive('/professor/my-courses')}`} href="/professor/my-courses">Mis Cursos</a>
+            <a className={`item ${isActive('/professor/create-course')}`} href="/professor/create-course">Crear Curso</a>
+            <a className={`item ${isActive('/professor/grades')}`} href="/professor/grades">Calificaciones</a>
           </>
         )}
 
         {role === 'student' && (
           <>
             <a className={`item ${isActive('/list-courses')}`} href="/list-courses">Cursos</a>
-            <a className={`item ${isActive('/my-courses')}`} href="/my-courses">Mis Cursos</a>
-            <a className={`item ${isActive('/my-grades')}`} href="/my-grades">Mis Calificaciones</a>
+            <a className={`item ${isActive('/student/my-courses')}`} href="/student/my-courses">Mis Cursos</a>
+            <a className={`item ${isActive('/student/my-grades')}`} href="/student/my-grades">Mis Calificaciones</a>
           </>
         )}
 
         <div className="right menu">
           <div className="item">
             <button className="ui red button" onClick={handleLogout}>
-              Logout
+              Cerrar Sesión
             </button>
           </div>
         </div>
