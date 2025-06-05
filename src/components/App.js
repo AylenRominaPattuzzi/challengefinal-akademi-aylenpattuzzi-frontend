@@ -13,10 +13,10 @@ import CreateCourse from './Course/CreateCourse';
 import ListProfessorCourses from './Course/ListProfessorCourses';
 import CourseDetail from './Course/CourseDetail';
 import ListCourses from './Course/ListCourses';
-import ListGrades from './Grades/ListGrades';
 import ListStudentCourses from './Course/ListStudentCourses';
 import ListStudentGrades from './Grades/ListStudentGrades';
 import CreateGrade from './Grades/CreateGrade';
+import ListProfessorGrades from './Grades/ListProfessorGrades';
 
 
 
@@ -39,10 +39,11 @@ const App = () => {
 
         <Route path="/professor/create-course" element={<CreateCourse />} />
         <Route path="/professor/my-courses" element={<ListProfessorCourses />} />
-        <Route path="/curse-detail/:id" element={<CourseDetail />} />
+        <Route path="/course-detail/:id" element={<CourseDetail />} />
+        <Route path="/student/list-courses" element={<ListCourses />} />
         <Route path="/list-courses" element={<ListCourses />} />
 
-        <Route path="/professor/grades" element={<ListGrades />} />
+        <Route path="/professor/grades/:id" element={<ListProfessorGrades />} />
 
         <Route path="/student/my-courses" element={<ListStudentCourses />} />
         <Route path="/student/my-grades" element={<ListStudentGrades />} />

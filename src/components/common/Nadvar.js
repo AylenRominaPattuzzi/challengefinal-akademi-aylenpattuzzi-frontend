@@ -25,6 +25,7 @@ const Navbar = ({ role, logoutUser }) => {
           <>
             <a className={`item ${isActive('/dashboard')}`} href="/dashboard">Página Principal</a>
             <a className={`item ${isActive('/list-users')}`} href="/list-users">Usuarios</a>
+            <a className={`item ${isActive('/list-courses')}`} href="/list-courses">Cursos</a>
             <a className={`item ${isActive('/create-professor')}`} href="/create-professor">Crear Profesor</a>
           </>
         )}
@@ -39,7 +40,7 @@ const Navbar = ({ role, logoutUser }) => {
 
         {role === 'student' && (
           <>
-            <a className={`item ${isActive('/list-courses')}`} href="/list-courses">Cursos</a>
+            <a className={`item ${isActive('/student/list-courses')}`} href="/student/list-courses">Cursos</a>
             <a className={`item ${isActive('/student/my-courses')}`} href="/student/my-courses">Mis Cursos</a>
             <a className={`item ${isActive('/student/my-grades')}`} href="/student/my-grades">Mis Calificaciones</a>
           </>
