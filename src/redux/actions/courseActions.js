@@ -23,7 +23,6 @@ import {
   DELETE_COURSE_FAILURE,
 } from '../types/courseType';
 
-// Crear curso
 export const createCourse = (courseData) => async (dispatch) => {
   dispatch({ type: CREATE_COURSE_REQUEST });
   try {
@@ -35,7 +34,7 @@ export const createCourse = (courseData) => async (dispatch) => {
   }
 };
 
-// Listar cursos de profesor
+
 export const getCoursesByProfessor = ({ page = 1, search = '', category = '' } = {}) => async (dispatch) => {
   dispatch({ type: FETCH_COURSES_BY_PROFESSOR_REQUEST });
   try {
@@ -84,7 +83,7 @@ export const getCoursesByStudent = ({ page = 1, search = '', category = '' } = {
   }
 };
 
-// Listar todos los cursos
+
 export const getCourses = ({ page = 1, search = '', category = '' } = {}) => async (dispatch) => {
   dispatch({ type: FETCH_COURSES_REQUEST });
   try {
@@ -110,7 +109,7 @@ export const getCourses = ({ page = 1, search = '', category = '' } = {}) => asy
   }
 };
 
-// Obtener curso por ID
+
 export const getCourseById = (id) => async (dispatch) => {
   console.log('getCourseById: iniciando con id =', id);
   dispatch({ type: FETCH_COURSE_BY_ID_REQUEST });
@@ -128,7 +127,7 @@ export const getCourseById = (id) => async (dispatch) => {
 };
 
 
-// Actualizar curso
+
 export const updateCourse = (id, courseData) => async (dispatch) => {
   dispatch({ type: UPDATE_COURSE_REQUEST });
   try {
@@ -139,7 +138,7 @@ export const updateCourse = (id, courseData) => async (dispatch) => {
   }
 };
 
-// Eliminar curso
+
 export const deleteCourse = (id) => async (dispatch) => {
   dispatch({ type: DELETE_COURSE_REQUEST });
   try {

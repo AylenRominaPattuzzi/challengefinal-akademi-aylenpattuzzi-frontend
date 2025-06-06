@@ -6,7 +6,7 @@ import {
     LOGOUT,
 } from "../types/authTypes";
 
-// Iniciar sesión
+
 export const loginUser = (credentials) => async (dispatch) => {
     dispatch({ type: LOGIN_REQUEST });
 
@@ -23,7 +23,7 @@ export const loginUser = (credentials) => async (dispatch) => {
     }
 };
 
-// Cerrar sesión
+
 export const logoutUser = () => async (dispatch) => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");

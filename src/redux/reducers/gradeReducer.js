@@ -159,7 +159,7 @@ export default function gradeReducer(state = initialState, action) {
       return {
         ...state,
         gradesByCourse: {
-          grades: action.payload.grades,
+          grades: action.payload.data,
           extraStudents: action.payload.extra,
         },
         operations: {

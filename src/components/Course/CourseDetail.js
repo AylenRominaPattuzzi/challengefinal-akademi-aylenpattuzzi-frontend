@@ -31,10 +31,8 @@ const CourseDetail = ({
   const [openCancelModal, setOpenCancelModal] = useState(false);
 
   useEffect(() => {
-    if (!course) {
       getCourseById(id);
-    }
-  }, [getCourseById, id, course]);
+  }, [getCourseById, id]);
 
   useEffect(() => {
     if (course) {

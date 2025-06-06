@@ -15,7 +15,6 @@ import CourseDetail from './Course/CourseDetail';
 import ListCourses from './Course/ListCourses';
 import ListStudentCourses from './Course/ListStudentCourses';
 import ListStudentGrades from './Grades/ListStudentGrades';
-import CreateGrade from './Grades/CreateGrade';
 import ListProfessorGrades from './Grades/ListProfessorGrades';
 import { WithProtectedRoute } from '../utils/WithProtectedRoute';
 import { ToastContainer } from 'react-toastify';
@@ -72,12 +71,6 @@ const App = () => {
           <WithProtectedRoute
             roles={['professor']}
             component={<ListProfessorGrades />}
-          />} />
-
-        <Route path="/professor/student/:studentId/grade" element={
-          <WithProtectedRoute
-            roles={['professor']}
-            component={<CreateGrade />}
           />} />
 
         <Route path="/course-detail/:id" element={

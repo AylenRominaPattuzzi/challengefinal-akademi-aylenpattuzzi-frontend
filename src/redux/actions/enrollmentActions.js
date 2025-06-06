@@ -8,7 +8,7 @@ import {
   CANCEL_ENROLLMENT_FAILURE,
 } from '../types/enrollmentsTypes';
 
-// Inscribirse a un curso
+
 export const enrollInCourse = (enrollmentData) => async (dispatch) => {
   dispatch({ type: ENROLL_IN_COURSE_REQUEST });
   try {
@@ -23,7 +23,7 @@ export const enrollInCourse = (enrollmentData) => async (dispatch) => {
   }
 };
 
-// Cancelar inscripción
+
 export const cancelEnrollment = (id) => async (dispatch) => {
   dispatch({ type: CANCEL_ENROLLMENT_REQUEST });
   try {

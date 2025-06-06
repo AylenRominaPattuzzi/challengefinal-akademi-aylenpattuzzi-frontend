@@ -133,7 +133,10 @@ const RegisterProfessor = ({ createProfessor, loading }) => {
                                 label='Fecha de nacimiento'
                                 type='date'
                                 value={birthDate}
-                                onChange={(e) => setBirthDate(e.target.value)}
+                                onChange={(e) => {
+                                    setBirthDate(e.target.value)
+                                    setFieldErrors((prev) => ({ ...prev, birthDate: '' }));
+                                }}
                             />
                             <FieldError message={fieldErrors.birthDate} />
 

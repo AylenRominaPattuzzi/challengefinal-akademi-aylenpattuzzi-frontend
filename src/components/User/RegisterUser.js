@@ -8,7 +8,7 @@ import FieldError from '../common/FieldError';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../common/Loading';
 
-const RegisterUser = ({ addUser , loading}) => {
+const RegisterUser = ({ addUser, loading }) => {
     const navigate = useNavigate();
 
     const [name, setName] = useState('');
@@ -20,29 +20,23 @@ const RegisterUser = ({ addUser , loading}) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e) => {
-        console.log("s");
-        
         e.preventDefault();
-        console.log("prevent");
 
         if (isLoading) return;
         console.log("loading");
 
-        const errors = validateUser({ name, email, password });
-        console.log("validate");
+        const errors = validateUser({ name, email, password, documentNumber, birthDate });
 
         if (Object.keys(errors).length > 0) {
             console.log(errors);
             setFieldErrors(errors);
             return;
         }
-        console.log("errors");
 
         setFieldErrors({});
         setIsLoading(true);
         try {
-            console.log("try");
-            
+
             await addUser({
                 name,
                 email,
@@ -53,7 +47,7 @@ const RegisterUser = ({ addUser , loading}) => {
                     birthDate
                 }
             });
-            
+
 
             setName('');
             setEmail('');
@@ -63,7 +57,7 @@ const RegisterUser = ({ addUser , loading}) => {
             navigate('/login');
         } catch (err) {
             console.log(err);
-            
+
         } finally {
             setIsLoading(false);
         }
@@ -71,7 +65,7 @@ const RegisterUser = ({ addUser , loading}) => {
 
     return (
         <div className="ui middle aligned center aligned grid" style={{ height: '100vh' }}>
-                {loading && <Loading />}
+            {loading && <Loading />}
             <div className="column" style={{ maxWidth: 450 }}>
                 <div className="ui card fluid">
                     <div className="content">
@@ -130,8 +124,12 @@ const RegisterUser = ({ addUser , loading}) => {
                                 label='Fecha de nacimiento'
                                 type='date'
                                 value={birthDate}
-                                onChange={(e) => setBirthDate(e.target.value)}
+                                onChange={(e) => {
+                                    setBirthDate(e.target.value);
+                                    setFieldErrors((prev) => ({ ...prev, birthDate: '' }));
+                                }}
                             />
+                            <FieldError message={fieldErrors.birthDate} />
 
                             <Button
                                 type="submit"
