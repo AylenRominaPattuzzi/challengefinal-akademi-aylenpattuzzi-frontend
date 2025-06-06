@@ -4,7 +4,7 @@ import { getCourses } from '../../redux/actions/courseActions';
 import { enrollInCourse } from '../../redux/actions/enrollmentActions';
 import { useNavigate } from 'react-router-dom';
 import { CardCourse } from '../common/CardCourse';
-
+import Pagination from '../common/Pagination'; 
 
 const ListCourses = ({
   courses,
@@ -16,7 +16,7 @@ const ListCourses = ({
   studentId,
   role,
   totalPages = 1,
-  currentPage
+  currentPage,
 }) => {
   const navigate = useNavigate();
 
@@ -40,23 +40,6 @@ const ListCourses = ({
 
   const isEnrolled = (courseId) => {
     return enrollments?.some((e) => e.courseId === courseId && e.studentId === studentId);
-  };
-
-  const renderPagination = () => {
-    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-    return (
-      <div className="ui pagination menu">
-        {pages.map((p) => (
-          <button
-            key={p}
-            className={`item ${p === page ? 'active' : ''}`}
-            onClick={() => setPage(p)}
-          >
-            {p}
-          </button>
-        ))}
-      </div>
-    );
   };
 
   if (error) {
@@ -101,7 +84,9 @@ const ListCourses = ({
           </div>
         </div>
       </div>
-      {loading }
+
+      {loading}
+
       {(!courses || courses.length === 0) ? (
         <div className="ui message info">No hay cursos disponibles.</div>
       ) : (
@@ -119,7 +104,12 @@ const ListCourses = ({
               />
             ))}
           </div>
-          {totalPages > 1 && renderPagination()}
+
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(newPage) => setPage(newPage)}
+          />
         </>
       )}
     </div>

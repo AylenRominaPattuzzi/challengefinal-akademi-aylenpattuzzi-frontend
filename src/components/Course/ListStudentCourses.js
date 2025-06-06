@@ -5,7 +5,7 @@ import { cancelEnrollment } from '../../redux/actions/enrollmentActions';
 import { useNavigate } from 'react-router-dom';
 import { CardCourse } from '../common/CardCourse';
 import Modal from '../common/Modal';
-
+import Pagination from '../common/Pagination';
 
 const ListStudentCourses = ({
   courses,
@@ -45,24 +45,6 @@ const ListStudentCourses = ({
     setShowModal(false);
     setSelectedCourse(null);
   };
-
-  const renderPagination = () => {
-    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-    return (
-      <div className="ui pagination menu">
-        {pages.map((p) => (
-          <button
-            key={p}
-            className={`item ${p === page ? 'active' : ''}`}
-            onClick={() => setPage(p)}
-          >
-            {p}
-          </button>
-        ))}
-      </div>
-    );
-  };
-
 
   if (error) {
     return (
@@ -106,7 +88,7 @@ const ListStudentCourses = ({
           </div>
         </div>
       </div>
-      {loading }
+      {loading}
       {(!courses || courses.length === 0) ? (
         <div className="ui message info">No estás inscripto en ningún curso.</div>
       ) : (
@@ -123,7 +105,11 @@ const ListStudentCourses = ({
               />
             ))}
           </div>
-          {totalPages > 1 && renderPagination()}
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(newPage) => setPage(newPage)}
+          />
         </>
       )}
 

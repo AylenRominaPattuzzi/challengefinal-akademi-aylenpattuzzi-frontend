@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import GradeModal from '../common/GradeModal';
 import Modal from '../common/Modal';
 import { toast } from 'react-toastify';
+import Pagination from '../common/Pagination'; 
 
 
 const ListProfessorGrades = ({
@@ -87,23 +88,6 @@ const ListProfessorGrades = ({
     }
   };
 
-  const renderPagination = () => {
-    if (!totalPages || totalPages <= 1) return null;
-    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-    return (
-      <div className="ui pagination menu">
-        {pages.map((p) => (
-          <button
-            key={p}
-            className={`item ${p === page ? 'active' : ''}`}
-            onClick={() => setPage(p)}
-          >
-            {p}
-          </button>
-        ))}
-      </div>
-    );
-  };
 
   return (
     <div className="ui middle aligned center aligned grid" style={{ paddingTop: '2rem' }}>
@@ -194,8 +178,11 @@ const ListProfessorGrades = ({
                 )}
               </tbody>
             </table>
-
-            {totalPages > 1 && renderPagination()}
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={(newPage) => setPage(newPage)}
+            />
           </div>
         </div>
       </div>
@@ -236,7 +223,7 @@ const ListProfessorGrades = ({
 const mapStateToProps = (state) => ({
   grades: state.grade.gradesByCourse?.grades ?? [],
   extraStudents: state.grade.gradesByCourse?.extraStudents ?? [],
-  totalPages: state.grade.gradesByCourse?.totalPages ?? 1, 
+  totalPages: state.grade.gradesByCourse?.totalPages ?? 1,
   loading: state.grade.operations.fetchGradesByCourse?.loading,
   error: state.grade.operations.fetchGradesByCourse?.error,
 });

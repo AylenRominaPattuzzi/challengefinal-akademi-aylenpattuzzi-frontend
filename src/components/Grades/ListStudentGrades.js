@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchGradesByStudent } from '../../redux/actions/gradeActions';
-
+import Pagination from '../common/Pagination'; 
 
 const ListStudentGrades = ({
   grades,
@@ -19,24 +19,6 @@ const ListStudentGrades = ({
   useEffect(() => {
     fetchGradesByStudent({ page, search, value });
   }, [fetchGradesByStudent, page, search, value]);
-
-  const renderPagination = () => {
-    if (totalPages <= 1) return null;
-    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-    return (
-      <div className="ui pagination menu" style={{ marginTop: '1rem' }}>
-        {pages.map((p) => (
-          <button
-            key={p}
-            className={`item ${p === page ? 'active' : ''}`}
-            onClick={() => setPage(p)}
-          >
-            {p}
-          </button>
-        ))}
-      </div>
-    );
-  };
 
   return (
     <div className="ui middle aligned center aligned grid" style={{ paddingTop: '2rem' }}>
@@ -120,7 +102,11 @@ const ListStudentGrades = ({
                 )}
               </tbody>
             </table>
-            {totalPages > 1 && renderPagination()}
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={(newPage) => setPage(newPage)}
+            />
           </div>
         </div>
       </div>

@@ -4,7 +4,8 @@ import { getCoursesByProfessor, deleteCourse } from '../../redux/actions/courseA
 import { useNavigate } from 'react-router-dom';
 import { CardCourse } from '../common/CardCourse';
 import Modal from '../common/Modal';
-import Loading from '../common/Loading';
+import Pagination from '../common/Pagination';
+
 const ListProfessorCourses = ({
   courses,
   getCoursesByProfessor,
@@ -52,24 +53,6 @@ const ListProfessorCourses = ({
     setShowModal(false);
   };
 
-  const renderPagination = () => {
-    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-    return (
-      <div className="ui pagination menu">
-        {pages.map((p) => (
-          <button
-            key={p}
-            className={`item ${p === page ? 'active' : ''}`}
-            onClick={() => setPage(p)}
-          >
-            {p}
-          </button>
-        ))}
-      </div>
-    );
-  };
-
-
   if (error) {
     return (
       <div className="ui negative message">
@@ -112,7 +95,7 @@ const ListProfessorCourses = ({
           </div>
         </div>
       </div>
-      {loading }
+      {loading}
       {(!courses || courses.length === 0) ? (
         <div className="ui message info">No hay cursos disponibles.</div>
       ) : (
@@ -129,11 +112,15 @@ const ListProfessorCourses = ({
               />
             ))}
           </div>
-          {totalPages > 1 && renderPagination()}
+
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(newPage) => setPage(newPage)}
+          />
         </>
       )}
 
-      {/* Modal de Confirmación */}
       {showModal && selectedCourse && (
         <Modal
           productName={selectedCourse.title}

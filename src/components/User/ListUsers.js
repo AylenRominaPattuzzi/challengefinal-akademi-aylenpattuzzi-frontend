@@ -4,6 +4,7 @@ import { fetchUsers, deleteUser } from '../../redux/actions/userActions';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../common/Modal';
 import Loading from '../common/Loading';
+import Pagination from '../common/Pagination';
 
 const ListUsers = ({
     users,
@@ -48,22 +49,6 @@ const ListUsers = ({
         navigate(`/user-detail/${id}?edit=true`);
     };
 
-    const renderPagination = () => {
-        const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-        return (
-            <div className="ui pagination menu">
-                {pages.map((p) => (
-                    <button
-                        key={p}
-                        className={`item ${p === page ? 'active' : ''}`}
-                        onClick={() => setPage(p)}
-                    >
-                        {p}
-                    </button>
-                ))}
-            </div>
-        );
-    };
 
     return (
         <div className="ui middle aligned center aligned grid" style={{ paddingTop: '2rem' }}>
@@ -161,7 +146,11 @@ const ListUsers = ({
                             </tbody>
                         </table>
 
-                        {totalPages > 1 && renderPagination()}
+                        <Pagination
+                            currentPage={page}
+                            totalPages={totalPages}
+                            onPageChange={(newPage) => setPage(newPage)}
+                        />
                     </div>
                 </div>
             </div>
