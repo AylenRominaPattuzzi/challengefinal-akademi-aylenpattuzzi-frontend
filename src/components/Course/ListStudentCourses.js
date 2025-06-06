@@ -5,7 +5,7 @@ import { cancelEnrollment } from '../../redux/actions/enrollmentActions';
 import { useNavigate } from 'react-router-dom';
 import { CardCourse } from '../common/CardCourse';
 import Modal from '../common/Modal';
-import Loading from '../common/Loading';
+
 
 const ListStudentCourses = ({
   courses,
@@ -26,7 +26,7 @@ const ListStudentCourses = ({
 
   useEffect(() => {
     getCoursesByStudent({ search, category, page });
-  }, [getCoursesByStudent, search, category, page]);
+  }, [search, category, page]);
 
   const handleViewCourse = (id) => {
     navigate(`/course-detail/${id}`);
@@ -63,9 +63,6 @@ const ListStudentCourses = ({
     );
   };
 
-  if (loading) {
-    return <div className="ui active centered inline loader" />;
-  }
 
   if (error) {
     return (
@@ -78,7 +75,6 @@ const ListStudentCourses = ({
 
   return (
     <div className="ui container" style={{ paddingTop: '2rem' }}>
-      {loading && <Loading />}
       <h2 className="ui header">Mis cursos</h2>
 
       <div className="ui form" style={{ marginBottom: '1rem' }}>
@@ -110,7 +106,7 @@ const ListStudentCourses = ({
           </div>
         </div>
       </div>
-
+      {loading }
       {(!courses || courses.length === 0) ? (
         <div className="ui message info">No estás inscripto en ningún curso.</div>
       ) : (

@@ -4,7 +4,7 @@ import { getCourses } from '../../redux/actions/courseActions';
 import { enrollInCourse } from '../../redux/actions/enrollmentActions';
 import { useNavigate } from 'react-router-dom';
 import { CardCourse } from '../common/CardCourse';
-import Loading from '../common/Loading';
+
 
 const ListCourses = ({
   courses,
@@ -22,12 +22,11 @@ const ListCourses = ({
 
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
-  const [price, setPrice] = useState('');
   const [page, setPage] = useState(currentPage || 1);
 
   useEffect(() => {
     getCourses({ search, category, page });
-  }, [search, category, price, page]);
+  }, [search, category, page]);
 
   const handleViewCourse = (id) => {
     navigate(`/course-detail/${id}`);
@@ -60,10 +59,6 @@ const ListCourses = ({
     );
   };
 
-  if (loading) {
-    return <div className="ui active centered inline loader" />;
-  }
-
   if (error) {
     return (
       <div className="ui negative message">
@@ -75,7 +70,6 @@ const ListCourses = ({
 
   return (
     <div className="ui container" style={{ paddingTop: '2rem' }}>
-      {loading && <Loading />}
       <h2 className="ui header">Cursos</h2>
 
       <div className="ui form" style={{ marginBottom: '1rem' }}>
@@ -107,7 +101,7 @@ const ListCourses = ({
           </div>
         </div>
       </div>
-
+      {loading }
       {(!courses || courses.length === 0) ? (
         <div className="ui message info">No hay cursos disponibles.</div>
       ) : (

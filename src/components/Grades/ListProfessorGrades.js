@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import GradeModal from '../common/GradeModal';
 import Modal from '../common/Modal';
 import { toast } from 'react-toastify';
-import Loading from '../common/Loading';
+
 
 const ListProfessorGrades = ({
   grades,
@@ -107,7 +107,6 @@ const ListProfessorGrades = ({
 
   return (
     <div className="ui middle aligned center aligned grid" style={{ paddingTop: '2rem' }}>
-      {loading && <Loading />}
       <div className="column" style={{ maxWidth: '90%' }}>
         <div className="ui card fluid">
           <div className="content">

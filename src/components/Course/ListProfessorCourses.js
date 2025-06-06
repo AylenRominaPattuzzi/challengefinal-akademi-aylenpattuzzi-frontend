@@ -24,7 +24,7 @@ const ListProfessorCourses = ({
 
   useEffect(() => {
     getCoursesByProfessor({ search, category, page });
-  }, [getCoursesByProfessor, search, category, page]);
+  }, [search, category, page]);
 
   const handleViewCourse = (id) => {
     navigate(`/professor/grades/${id}`);
@@ -69,9 +69,6 @@ const ListProfessorCourses = ({
     );
   };
 
-  if (loading) {
-    return <div className="ui active centered inline loader" />;
-  }
 
   if (error) {
     return (
@@ -84,7 +81,6 @@ const ListProfessorCourses = ({
 
   return (
     <div className="ui container" style={{ paddingTop: '2rem' }}>
-      {loading && <Loading />}
       <h2 className="ui header">Mis Cursos</h2>
 
       <div className="ui form" style={{ marginBottom: '1rem' }}>
@@ -116,7 +112,7 @@ const ListProfessorCourses = ({
           </div>
         </div>
       </div>
-
+      {loading }
       {(!courses || courses.length === 0) ? (
         <div className="ui message info">No hay cursos disponibles.</div>
       ) : (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchGradesByStudent } from '../../redux/actions/gradeActions';
-import Loading from '../common/Loading';
+
 
 const ListStudentGrades = ({
   grades,
@@ -40,7 +40,6 @@ const ListStudentGrades = ({
 
   return (
     <div className="ui middle aligned center aligned grid" style={{ paddingTop: '2rem' }}>
-      {loading && <Loading />}
       <div className="column" style={{ maxWidth: '90%' }}>
         <div className="ui card fluid">
           <div className="content">
