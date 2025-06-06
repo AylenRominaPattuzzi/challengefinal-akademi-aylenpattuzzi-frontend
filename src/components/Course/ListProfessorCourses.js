@@ -64,7 +64,9 @@ const ListProfessorCourses = ({
 
   return (
     <div className="ui container" style={{ paddingTop: '2rem' }}>
-      <h2 className="ui header">Mis Cursos</h2>
+      <div className='ui middle aligned center aligned grid'>
+        <h2 className="ui header">Mis Cursos</h2>
+      </div>
 
       <div className="ui form" style={{ marginBottom: '1rem' }}>
         <div className="fields">
@@ -112,12 +114,13 @@ const ListProfessorCourses = ({
               />
             ))}
           </div>
-
-          <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={(newPage) => setPage(newPage)}
-          />
+          <div className='ui middle aligned center aligned grid'>
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={(newPage) => setPage(newPage)}
+            />
+          </div>
         </>
       )}
 

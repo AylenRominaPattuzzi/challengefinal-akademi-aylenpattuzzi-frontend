@@ -53,7 +53,10 @@ const ListCourses = ({
 
   return (
     <div className="ui container" style={{ paddingTop: '2rem' }}>
-      <h2 className="ui header">Cursos</h2>
+      <div className='ui middle aligned center aligned grid'>
+        <h2 className="ui header">Cursos</h2>
+      </div>
+      
 
       <div className="ui form" style={{ marginBottom: '1rem' }}>
         <div className="fields">
@@ -104,12 +107,14 @@ const ListCourses = ({
               />
             ))}
           </div>
+          <div className='ui middle aligned center aligned grid'>
 
-          <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={(newPage) => setPage(newPage)}
-          />
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={(newPage) => setPage(newPage)}
+            />
+          </div>
         </>
       )}
     </div>
