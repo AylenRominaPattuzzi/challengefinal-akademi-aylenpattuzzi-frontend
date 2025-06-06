@@ -1,13 +1,13 @@
-import React from 'react'
+import React from 'react';
+import './Loading.css';
 
 const Loading = () => {
-    return (
-        <div class="ui segment">
-            <div class="ui active inverted dimmer">
-                <div class="ui medium text loader">Loading</div>
-            </div>
-        </div>
-    )
-}
+  return (
+    <div className="custom-loading-overlay">
+      <div className="spinner"></div>
+      <p className="loading-text">Loading...</p>
+    </div>
+  );
+};
 
-export default Loading
+export default Loading;

@@ -17,40 +17,97 @@ import ListStudentCourses from './Course/ListStudentCourses';
 import ListStudentGrades from './Grades/ListStudentGrades';
 import CreateGrade from './Grades/CreateGrade';
 import ListProfessorGrades from './Grades/ListProfessorGrades';
-
-
+import { WithProtectedRoute } from '../utils/WithProtectedRoute';
+import { ToastContainer } from 'react-toastify';
 
 const App = () => {
 
   return (
     <div className="ui container">
       <Nadvar />
+      <ToastContainer />
       <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/recover-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/register" element={<RegisterUser />} />
 
-        <Route path="/list-users" element={<ListUsers />} />
-        <Route path="/user-detail/:id" element={<UserDetail />} />
-        <Route path="/create-professor" element={<RegisterProfessor />} />
+        <Route path="/dashboard" element={
+          <WithProtectedRoute
+            roles={['superadmin']}
+            component={<Dashboard />}
+          />} />
+          
+        <Route path="/list-users" element={
+          <WithProtectedRoute
+            roles={['superadmin']}
+            component={<ListUsers />}
+          />} />
+        <Route path="/user-detail/:id" element={
+          <WithProtectedRoute
+            roles={['superadmin']}
+            component={<UserDetail />}
+          />} />
 
-        <Route path="/professor/create-course" element={<CreateCourse />} />
-        <Route path="/professor/my-courses" element={<ListProfessorCourses />} />
-        <Route path="/course-detail/:id" element={<CourseDetail />} />
-        <Route path="/student/list-courses" element={<ListCourses />} />
-        <Route path="/list-courses" element={<ListCourses />} />
+        <Route path="/create-professor" element={
+          <WithProtectedRoute
+            roles={['superadmin']}
+            component={<RegisterProfessor />}
+          />} />
 
-        <Route path="/professor/grades/:id" element={<ListProfessorGrades />} />
+        <Route path="/professor/create-course" element={
+          <WithProtectedRoute
+            roles={['professor']}
+            component={<CreateCourse />}
+          />} />
 
-        <Route path="/student/my-courses" element={<ListStudentCourses />} />
-        <Route path="/student/my-grades" element={<ListStudentGrades />} />
+        <Route path="/professor/my-courses" element={
+          <WithProtectedRoute
+            roles={['professor']}
+            component={<ListProfessorCourses />}
+          />} />
 
-        <Route path="/professor/student/:studentId/grade" element={<CreateGrade />} />
+        <Route path="/professor/grades/:id" element={
+          <WithProtectedRoute
+            roles={['professor']}
+            component={<ListProfessorGrades />}
+          />} />
 
-  
+        <Route path="/professor/student/:studentId/grade" element={
+          <WithProtectedRoute
+            roles={['professor']}
+            component={<CreateGrade />}
+          />} />
+
+        <Route path="/course-detail/:id" element={
+          <WithProtectedRoute
+            roles={['professor', 'superadmin']}
+            component={<CourseDetail />}
+          />} />
+
+        <Route path="/list-courses" element={
+          <WithProtectedRoute
+            roles={['student', 'superadmin', 'professor']}
+            component={<ListCourses />}
+          />} />
+
+        <Route path="/student/list-courses" element={
+          <WithProtectedRoute
+            roles={['student']}
+            component={<ListCourses />}
+          />} />
+        <Route path="/student/my-courses" element={
+          <WithProtectedRoute
+            roles={['student']}
+            component={<ListStudentCourses />}
+          />} />
+
+        <Route path="/student/my-grades" element={
+          <WithProtectedRoute
+            roles={['student']}
+            component={<ListStudentGrades />}
+          />} />
       </Routes>
     </div>
   );

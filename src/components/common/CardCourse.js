@@ -5,6 +5,7 @@ export const CardCourse = ({
   onEnroll,
   onUnenroll,
   hideEnrollButton,
+  hideDetailButton = false,
   onView,
   onEdit,
   onShowGrades,   
@@ -50,11 +51,13 @@ export const CardCourse = ({
             </>
           )}
           {course.capacity && <span className="capacity">Cupos: {course.capacity}</span>}
+          <br/>
+          <span className="capacity">Inscriptos: {course.enrolleds || 0}</span>
         </div>
       )}
 
       <div className="extra content" style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-        {courseId && onView && (
+        {courseId && onView && !hideDetailButton && (
           <button className="ui blue basic button" onClick={() => onView(courseId)}>
             <i className="eye icon"></i> Detalle
           </button>
@@ -80,9 +83,9 @@ export const CardCourse = ({
             </button>
           ) : (
             <button
-              className={`ui blue basic button ${isEnrolled ? 'disabled' : ''}`}
+              className={`ui blue basic button ${course.isEnrolled ? 'disabled' : ''}`}
               onClick={onEnroll}
-              disabled={isEnrolled}
+              disabled={course.isEnrolled || (course.enrolleds >= course.capacity)}
             >
               <i className="signup icon"></i> {isEnrolled ? 'Inscripto' : 'Inscribirse'}
             </button>

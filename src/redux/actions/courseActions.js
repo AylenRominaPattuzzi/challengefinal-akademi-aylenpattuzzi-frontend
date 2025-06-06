@@ -36,21 +36,48 @@ export const createCourse = (courseData) => async (dispatch) => {
 };
 
 // Listar cursos de profesor
-export const getCoursesByProfessor = () => async (dispatch) => {
+export const getCoursesByProfessor = ({ page = 1, search = '', category = '', price = '' } = {}) => async (dispatch) => {
   dispatch({ type: FETCH_COURSES_BY_PROFESSOR_REQUEST });
   try {
+    const params = {};
+    if (page) params.page = page;
+    if (category) params.page = category;
+    if (price) params.page = price;
+    if (search) params.search = search;
+
     const response = await axiosInstance.get('/courses/professor');
-    dispatch({ type: FETCH_COURSES_BY_PROFESSOR_SUCCESS, payload: response.data });
+    const payload = {
+      courses: response.data.data,
+      total: response.data.total,
+      page: response.data.page,
+      limit: response.data.limit,
+      totalPages: response.data.totalPages,
+    }
+    dispatch({ type: FETCH_COURSES_BY_PROFESSOR_SUCCESS, payload });
   } catch (error) {
     dispatch({ type: FETCH_COURSES_BY_PROFESSOR_FAILURE, payload: error.response?.data?.message || 'Error al obtener cursos del profesor' });
   }
 };
 
-export const getCoursesByStudent = () => async (dispatch) => {
+export const getCoursesByStudent = ({ page = 1, search = '', category = '', price = '' } = {}) => async (dispatch) => {
+
   dispatch({ type: FETCH_COURSES_BY_STUDENT_REQUEST });
   try {
-    const response = await axiosInstance.get('/enrollments/my-courses'); 
-    dispatch({ type: FETCH_COURSES_BY_STUDENT_SUCCESS, payload: response.data });
+    const params = {};
+    if (page) params.page = page;
+    if (category) params.page = category;
+    if (price) params.page = price;
+    if (search) params.search = search;
+
+    const response = await axiosInstance.get('/enrollments/my-courses');
+    const payload = {
+      courses: response.data.data,
+      total: response.data.total,
+      page: response.data.page,
+      limit: response.data.limit,
+      totalPages: response.data.totalPages,
+    }
+    dispatch({ type: FETCH_COURSES_BY_STUDENT_SUCCESS, payload });
   } catch (error) {
     dispatch({
       type: FETCH_COURSES_BY_STUDENT_FAILURE,
@@ -60,12 +87,26 @@ export const getCoursesByStudent = () => async (dispatch) => {
 };
 
 // Listar todos los cursos
-export const getCourses = (queryParams = '') => async (dispatch) => {
+export const getCourses = ({ page = 1, search = '', category = '' } = {}) => async (dispatch) => {
   dispatch({ type: FETCH_COURSES_REQUEST });
   try {
-    const response = await axiosInstance.get(`/courses${queryParams}`);
+    const params = {};
+    console.log(page);
+
+    if (page) params.page = page;
+    if (category) params.category = category;
+    if (search) params.search = search;
+
+    const response = await axiosInstance.get('/courses', { params });
     console.log('getCourses response:', response.data);
-    dispatch({ type: FETCH_COURSES_SUCCESS, payload: response.data.data || response.data });
+    const payload = {
+      courses: response.data.data,
+      total: response.data.total,
+      page: response.data.page,
+      limit: response.data.limit,
+      totalPages: response.data.totalPages,
+    }
+    dispatch({ type: FETCH_COURSES_SUCCESS, payload });
   } catch (error) {
     dispatch({ type: FETCH_COURSES_FAILURE, payload: error.response?.data?.message || 'Error al obtener cursos' });
   }
@@ -81,9 +122,9 @@ export const getCourseById = (id) => async (dispatch) => {
     dispatch({ type: FETCH_COURSE_BY_ID_SUCCESS, payload: response.data });
   } catch (error) {
     console.error('getCourseById: error al obtener el curso:', error);
-    dispatch({ 
-      type: FETCH_COURSE_BY_ID_FAILURE, 
-      payload: error.response?.data?.message || 'Error al obtener el curso' 
+    dispatch({
+      type: FETCH_COURSE_BY_ID_FAILURE,
+      payload: error.response?.data?.message || 'Error al obtener el curso'
     });
   }
 };

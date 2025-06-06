@@ -19,7 +19,6 @@ export default function GradeModal({
           max="10"
           value={gradeValue}
           onChange={onChange}
-          placeholder="Ingrese la nota"
         />
         <div className="modal-actions">
           <Button texto="Cancelar" onClick={onCancel} type="button" />

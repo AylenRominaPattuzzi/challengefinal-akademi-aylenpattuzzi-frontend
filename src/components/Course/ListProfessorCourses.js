@@ -6,6 +6,8 @@ import { CardCourse } from '../common/CardCourse';
 
 const ListProfessorCourses = ({ courses, getCoursesByProfessor, deleteCourse, loading, error }) => {
   const navigate = useNavigate();
+  console.log(courses);
+  
 
   useEffect(() => {
     getCoursesByProfessor();

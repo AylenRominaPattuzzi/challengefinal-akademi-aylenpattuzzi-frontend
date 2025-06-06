@@ -55,13 +55,12 @@ const CreateCourse = ({ createCourse }) => {
             setCapacity('');
             setCategory('');
             setStudentsEnrolled('');
-            setPrice('');  // <-- limpiar precio
+            setPrice(''); 
 
-            alert('Curso creado con éxito');
             navigate('/professor/my-courses');
         } catch (err) {
-            const message = err?.response?.data?.message || 'Hubo un error al crear el curso';
-            alert(message);
+            console.log(err);
+            
         } finally {
             setIsLoading(false);
         }

@@ -52,7 +52,6 @@ const RegisterUser = ({ addUser }) => {
                     birthDate
                 }
             });
-            console.log("add");
             
 
             setName('');
@@ -60,12 +59,10 @@ const RegisterUser = ({ addUser }) => {
             setPassword('');
             setDocumentNumber('');
             setBirthDate('');
-
-            alert('Usuario registrado con éxito');
             navigate('/login');
         } catch (err) {
-            const message = err?.response?.data?.message || 'Hubo un error al registrar el usuario';
-            alert(message);
+            console.log(err);
+            
         } finally {
             setIsLoading(false);
         }

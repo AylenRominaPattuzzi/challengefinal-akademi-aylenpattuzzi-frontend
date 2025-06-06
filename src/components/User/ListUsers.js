@@ -21,9 +21,6 @@ const ListUsers = ({
         fetchUsers({ page, role, search });
     }, [fetchUsers, page, role, search]);
 
-    const handleViewUser = (id) => {
-        navigate(`/user-detail/${id}`);
-    };
 
     const handleDeleteUser = (id) => {
         if (window.confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
@@ -60,33 +57,38 @@ const ListUsers = ({
                         <h2 className="ui header">Listado de Usuarios</h2>
 
                         <div className="ui form" style={{ marginBottom: '1rem' }}>
-                            <div className="field">
-                                <label>Filtrar por rol:</label>
-                                <select
-                                    className="ui dropdown"
-                                    value={role}
-                                    onChange={(e) => {
-                                        setRole(e.target.value);
-                                        setPage(1); // reset al cambiar filtro
-                                    }}
-                                >
-                                    <option value="">Todos</option>
-                                    <option value="superadmin">SUPERADMIN</option>
-                                    <option value="student">ESTUDIANTE</option>
-                                    <option value="professor">PROFESOR</option>
-                                </select>
-                            </div>
-                            <div className='field'>
-                                <input
-                                className="ui"
-                                value={search}
-                                    onChange={(e) => {
-                                        setSearch(e.target.value);
-                                        setPage(1); // reset al cambiar filtro
-                                    }}
-                                ></input>
+                            <div className="fields">
+                                <div className="field">
+                                    <select
+                                        className="ui dropdown"
+                                        value={role}
+                                        onChange={(e) => {
+                                            setRole(e.target.value);
+                                            setPage(1);
+                                        }}
+                                    >
+                                        <option value="">Todos</option>
+                                        <option value="superadmin">SUPERADMIN</option>
+                                        <option value="student">ESTUDIANTE</option>
+                                        <option value="professor">PROFESOR</option>
+                                    </select>
+                                </div>
+                                <div className='field'>
+                                    <div className="field">
+                                        <input
+                                            type="text"
+                                            placeholder="Buscar usuario..."
+                                            value={search}
+                                            onChange={(e) => {
+                                                setSearch(e.target.value);
+                                                setPage(1);
+                                            }}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
 
                         {errorUsers && (
                             <div className="ui negative message">
@@ -144,7 +146,7 @@ const ListUsers = ({
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

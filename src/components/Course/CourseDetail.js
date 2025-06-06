@@ -15,7 +15,6 @@ const CourseDetail = ({
   updateCourse,
   isLoadingCourse,
   isUpdatingCourse,
-  errorLoadingCourse,
   errorUpdatingCourse,
 }) => {
   const { id } = useParams();
@@ -27,7 +26,7 @@ const CourseDetail = ({
   const [endDate, setEndDate] = useState('');
   const [capacity, setCapacity] = useState('');
   const [category, setCategory] = useState('');
-
+  const [price, setPrice] = useState('');  
   const [fieldErrors, setFieldErrors] = useState({});
   const [disabled, setDisabled] = useState(true);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -38,10 +37,8 @@ const CourseDetail = ({
       getCourseById(id);
     }
   }, [getCourseById, id, course]);
-  
+
   useEffect(() => {
-    console.log('curso', course);
-    
     if (course) {
       setTitle(course.title || '');
       setDescription(course.description || '');
@@ -49,13 +46,13 @@ const CourseDetail = ({
       setEndDate(course.endDate?.substring(0, 10) || '');
       setCapacity(course.capacity ?? '');
       setCategory(course.category || '');
+      setPrice(course.price ?? '');  
     }
   }, [course]);
-  
-  
+
   useEffect(() => {
     if (!isUpdatingCourse && showSuccessMessage === false && !errorUpdatingCourse) {
-      if (!disabled) { 
+      if (!disabled) {
         setShowSuccessMessage(true);
         setDisabled(true);
         const timer = setTimeout(() => {
@@ -69,7 +66,7 @@ const CourseDetail = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const updatedData = {
       title,
       description,
@@ -77,21 +74,28 @@ const CourseDetail = ({
       endDate,
       capacity: parseInt(capacity, 10),
       category,
+      price: parseFloat(price), 
     };
-  
+
     const errors = validateCourse(updatedData);
+
+  
+    if (!price || isNaN(price) || parseFloat(price) < 0) {
+      errors.price = 'Precio inválido';
+    }
+
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;
     }
-  
+
     setFieldErrors({});
-  
+
     try {
       await updateCourse(id, updatedData);
       setShowSuccessMessage(true);
       setDisabled(true);
-  
+
       setTimeout(() => {
         setShowSuccessMessage(false);
         navigate('/professor/');
@@ -100,7 +104,7 @@ const CourseDetail = ({
 
     }
   };
-  
+
   const handleCancelEdit = () => {
     if (course) {
       setTitle(course.title || '');
@@ -109,6 +113,7 @@ const CourseDetail = ({
       setEndDate(course.endDate?.substring(0, 10) || '');
       setCapacity(course.capacity ?? '');
       setCategory(course.category || '');
+      setPrice(course.price ?? '');  
     }
     setDisabled(true);
     setOpenCancelModal(false);
@@ -116,18 +121,6 @@ const CourseDetail = ({
 
   return (
     <div className="ui segment">
-      {showSuccessMessage && (
-        <Message message="Curso editado con éxito" stateMessage="positive" />
-      )}
-
-      {errorUpdatingCourse && (
-        <Message message={errorUpdatingCourse} stateMessage="negative" />
-      )}
-
-      {errorLoadingCourse && (
-        <Message message={errorLoadingCourse} stateMessage="negative" />
-      )}
-
       <div className="ui middle aligned center aligned grid" style={{ height: '100vh' }}>
         <div className="column" style={{ maxWidth: 500 }}>
           <div className={`ui card fluid ${isLoadingCourse || isUpdatingCourse ? 'loading' : ''}`}>
@@ -211,6 +204,18 @@ const CourseDetail = ({
                 />
                 <FieldError message={fieldErrors.category} />
 
+                <Input
+                  label="Precio"
+                  type="number"
+                  value={price}
+                  onChange={e => {
+                    setPrice(e.target.value);
+                    setFieldErrors(prev => ({ ...prev, price: '' }));
+                  }}
+                  disabled={disabled}
+                  placeholder="Ingrese el precio del curso"
+                />
+                <FieldError message={fieldErrors.price} />
 
                 <div className="ui buttons" style={{ marginTop: '1em' }}>
                   {disabled ? (
@@ -249,9 +254,9 @@ const mapStateToProps = (state) => ({
   errorUpdatingCourse: state.course?.operations?.updateCourse?.error ?? null,
 });
 
-
 const mapDispatchToProps = {
   getCourseById,
   updateCourse,
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(CourseDetail);

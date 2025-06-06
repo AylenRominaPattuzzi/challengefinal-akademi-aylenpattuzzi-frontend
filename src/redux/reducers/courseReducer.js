@@ -29,7 +29,7 @@ const initialState = {
         createCourse: { loading: false, error: null, success: false },
         fetchCourses: { loading: false, error: null, success: false },
         fetchCoursesByProfessor: { loading: false, error: null, success: false },
-        fetchCoursesByStudent: { loading: false, error: null, success: false }, // 👈 AGREGAR ESTO
+        fetchCoursesByStudent: { loading: false, error: null, success: false }, 
         fetchCourseById: { loading: false, error: null, success: false },
         updateCourse: { loading: false, error: null, success: false },
         deleteCourse: { loading: false, error: null, success: false },
@@ -76,7 +76,9 @@ export default function courseReducer(state = initialState, action) {
         case FETCH_COURSES_SUCCESS:
             return {
                 ...state,
-                courses: action.payload,
+                courses: action.payload.courses,
+                totalPages: action.payload.totalPages,
+                currentPage: action.payload.page,
                 operations: {
                     ...state.operations,
                     fetchCourses: { loading: false, error: null, success: true },
@@ -102,7 +104,9 @@ export default function courseReducer(state = initialState, action) {
         case FETCH_COURSES_BY_PROFESSOR_SUCCESS:
             return {
                 ...state,
-                courses: action.payload,
+                courses: action.payload.courses,
+                totalPages: action.payload.totalPages,
+                currentPage: action.payload.page,
                 operations: {
                     ...state.operations,
                     fetchCoursesByProfessor: { loading: false, error: null, success: true },
@@ -127,7 +131,9 @@ export default function courseReducer(state = initialState, action) {
         case FETCH_COURSES_BY_STUDENT_SUCCESS:
             return {
                 ...state,
-                courses: action.payload,
+                courses: action.payload.courses,
+                totalPages: action.payload.totalPages,
+                currentPage: action.payload.page,
                 operations: {
                     ...state.operations,
                     fetchCourses: { loading: false, error: null, success: true },

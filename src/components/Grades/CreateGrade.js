@@ -21,7 +21,6 @@ const CreateGrade = ({
   const [student, setStudent] = useState(null);
   const [grade, setGrade] = useState('');
   const [fieldErrors, setFieldErrors] = useState({});
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   useEffect(() => {
     fetchStudentsWithCoursesByProfessor(professorId);
@@ -57,7 +56,6 @@ const CreateGrade = ({
         grade: parseFloat(grade)
       });
 
-      setShowSuccessMessage(true);
       setTimeout(() => {
         navigate('/professor/students');
       }, 2000);
@@ -72,9 +70,6 @@ const CreateGrade = ({
 
   return (
     <div className="ui segment">
-      {showSuccessMessage && (
-        <Message message="Nota cargada con éxito" stateMessage="positive" />
-      )}
 
       {errorCreatingGrade && (
         <Message message={errorCreatingGrade} stateMessage="negative" />

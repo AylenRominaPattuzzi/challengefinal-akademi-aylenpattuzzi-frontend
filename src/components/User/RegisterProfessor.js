@@ -50,11 +50,10 @@ const RegisterProfessor = ({ createProfessor }) => {
             setSpecialty('')
             setBirthDate('');
 
-            alert('Profesor registrado con éxito');
             navigate('/login');
         } catch (err) {
-            const message = err?.response?.data?.message || 'Hubo un error al registrar el profesor';
-            alert(message);
+            console.log(err);
+            
         } finally {
             setIsLoading(false);
         }

@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { getCoursesByStudent } from '../../redux/actions/courseActions'; 
+import { getCoursesByStudent } from '../../redux/actions/courseActions';
 import { cancelEnrollment } from '../../redux/actions/enrollmentActions';
 import { useNavigate } from 'react-router-dom';
 import { CardCourse } from '../common/CardCourse';
 import Modal from '../common/Modal';
 
-const ListStudentCourses = ({ courses, getCoursesByStudent, cancelEnrollment, loading, error }) => {
+const ListStudentCourses = ({
+  courses,
+  getCoursesByStudent,
+  cancelEnrollment,
+  loading,
+  error
+}) => {
+  console.log(courses);
+
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -26,12 +34,12 @@ const ListStudentCourses = ({ courses, getCoursesByStudent, cancelEnrollment, lo
 
   const handleCancelEnrollment = async () => {
     console.log(1);
-    
+
     if (selectedCourse?.enrollmentId) {
       console.log(2);
-      
+
       await cancelEnrollment(selectedCourse.enrollmentId);
-      await getCoursesByStudent(); 
+      await getCoursesByStudent();
     }
     setShowModal(false);
     setSelectedCourse(null);
@@ -59,12 +67,13 @@ const ListStudentCourses = ({ courses, getCoursesByStudent, cancelEnrollment, lo
       <h2 className="ui header">Mis cursos</h2>
       <div className="ui three stackable cards">
         {courses.map((course) => (
-          <CardCourse 
-            key={course._id} 
-            course={course} 
-            onView={handleViewCourse} 
-            isEnrolled={true} 
-            onUnenroll={() => handleOpenModal(course)} 
+          <CardCourse
+            key={course._id}
+            course={course}
+            onView={handleViewCourse}
+            isEnrolled={true}
+            onUnenroll={() => handleOpenModal(course)}
+            hideDetailButton={true}
           />
         ))}
       </div>
@@ -75,7 +84,7 @@ const ListStudentCourses = ({ courses, getCoursesByStudent, cancelEnrollment, lo
           modalTitle="¿Desinscribirse del curso?"
           modalDescription="¿Estás seguro de que deseas desinscribirte del curso"
           onCancel={() => setShowModal(false)}
-          onConfirm={handleCancelEnrollment}    
+          onConfirm={handleCancelEnrollment}
         />
       )}
     </div>

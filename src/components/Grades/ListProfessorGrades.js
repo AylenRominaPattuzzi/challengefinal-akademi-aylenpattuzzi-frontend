@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { fetchGradesByCourse, createGrade } from '../../redux/actions/gradeActions';
+import { fetchGradesByCourse, createGrade, updateGrade } from '../../redux/actions/gradeActions';
 import { useNavigate, useParams } from 'react-router-dom';
 import GradeModal from '../common/GradeModal';
+import Modal from '../common/Modal'; 
+import { toast } from 'react-toastify';
+import Loading from '../common/Loading';
 
 const ListProfessorGrades = ({
   grades,
   extraStudents,
   fetchGradesByCourse,
   createGrade,
+  updateGrade,
   loading,
   error,
 }) => {
   const { id: courseId } = useParams();
-  const navigate = useNavigate();
 
   const [addingGradeFor, setAddingGradeFor] = useState(null);
+  const [editingGrade, setEditingGrade] = useState(null);
   const [newGrade, setNewGrade] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
     if (courseId) {
@@ -29,14 +34,17 @@ const ListProfessorGrades = ({
     setNewGrade('');
   };
 
-  const handleEditGrade = (studentId, courseId) => {
-    navigate(`/edit-grade?studentId=${studentId}&courseId=${courseId}`);
+  const handleEditGrade = (grade) => {
+    setEditingGrade(grade);
+    setNewGrade(grade.value.toString());
   };
 
   const handleSaveGrade = async () => {
     const numericGrade = parseFloat(newGrade);
     if (!newGrade || isNaN(numericGrade) || numericGrade < 0 || numericGrade > 10) {
-      alert('Ingrese una nota válida entre 0 y 10');
+      setAddingGradeFor(null);
+      setNewGrade('');
+      toast.error("Operación no guardada: La nota debe estar entre 0 y 10")
       return;
     }
     try {
@@ -49,13 +57,36 @@ const ListProfessorGrades = ({
       setNewGrade('');
       fetchGradesByCourse(courseId);
     } catch (err) {
-      alert('Error al guardar la nota');
+      console.error(err);
+    }
+  };
+
+  const handleConfirmEdit = async () => {
+    const numericGrade = parseFloat(newGrade);
+    if (isNaN(numericGrade) || numericGrade < 0 || numericGrade > 10) {
+      setEditingGrade(null);
+      setNewGrade('');
+      setShowConfirmModal(false);
+      toast.error("Operación no guardada: La nota debe estar entre 0 y 10")
+      return;
+    }
+
+    try {
+      await updateGrade(editingGrade._id, {
+        value: numericGrade,
+      });
+      setEditingGrade(null);
+      setNewGrade('');
+      setShowConfirmModal(false);
+      fetchGradesByCourse(courseId);
+    } catch (err) {
       console.error(err);
     }
   };
 
   return (
     <div className="ui middle aligned center aligned grid" style={{ paddingTop: '2rem' }}>
+      {loading && <Loading />}
       <div className="column" style={{ maxWidth: '90%' }}>
         <div className="ui card fluid">
           <div className="content">
@@ -129,7 +160,7 @@ const ListProfessorGrades = ({
                       <td>
                         <button
                           className="ui mini green button"
-                          onClick={() => handleEditGrade(grade.student?._id, courseId)}
+                          onClick={() => handleEditGrade(grade)}
                         >
                           Editar Nota
                         </button>
@@ -147,17 +178,33 @@ const ListProfessorGrades = ({
         </div>
       </div>
 
-      {/* Usamos el modal personalizado */}
-      {addingGradeFor && (
+      {(addingGradeFor || editingGrade) && (
         <GradeModal
-          studentName={addingGradeFor.name}
+          studentName={(addingGradeFor || editingGrade?.student)?.name}
           gradeValue={newGrade}
           onChange={(e) => setNewGrade(e.target.value)}
           onCancel={() => {
             setAddingGradeFor(null);
+            setEditingGrade(null);
             setNewGrade('');
           }}
-          onSave={handleSaveGrade}
+          onSave={() => {
+            if (editingGrade) {
+              setShowConfirmModal(true);
+            } else {
+              handleSaveGrade();
+            }
+          }}
+        />
+      )}
+
+      {showConfirmModal && (
+        <Modal
+          modalTitle="Confirmar edición"
+          modalDescription="¿Estás seguro que querés cambiar la nota a"
+          productName={newGrade}
+          onCancel={() => setShowConfirmModal(false)}
+          onConfirm={handleConfirmEdit}
         />
       )}
     </div>
@@ -174,6 +221,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   fetchGradesByCourse,
   createGrade,
+  updateGrade,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListProfessorGrades);
