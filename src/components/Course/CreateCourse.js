@@ -6,8 +6,9 @@ import Button from '../common/Button';
 import FieldError from '../common/FieldError';
 import { useNavigate } from 'react-router-dom';
 import { validateCourse } from '../../utils/ValidateForm';
+import Loading from '../common/Loading';
 
-const CreateCourse = ({ createCourse }) => {
+const CreateCourse = ({ createCourse, loading }) => {
     const navigate = useNavigate();
 
     const [title, setTitle] = useState('');
@@ -17,7 +18,7 @@ const CreateCourse = ({ createCourse }) => {
     const [capacity, setCapacity] = useState('');
     const [category, setCategory] = useState('');
     const [studentsEnrolled, setStudentsEnrolled] = useState('');
-    const [price, setPrice] = useState(''); 
+    const [price, setPrice] = useState('');
     const [fieldErrors, setFieldErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
 
@@ -25,7 +26,6 @@ const CreateCourse = ({ createCourse }) => {
         e.preventDefault();
         if (isLoading) return;
 
-        // Incluye price en la validación
         const errors = validateCourse({ title, description, startDate, endDate, capacity, category, price });
         if (Object.keys(errors).length > 0) {
             setFieldErrors(errors);
@@ -44,10 +44,10 @@ const CreateCourse = ({ createCourse }) => {
                 capacity: parseInt(capacity, 10),
                 category,
                 studentsEnrolled: studentsEnrolled ? parseInt(studentsEnrolled, 10) : 0,
-                price: parseFloat(price)  // <-- Envía precio parseado a número decimal
+                price: parseFloat(price)
             });
 
-            // Limpiar campos
+
             setTitle('');
             setDescription('');
             setStartDate('');
@@ -55,12 +55,12 @@ const CreateCourse = ({ createCourse }) => {
             setCapacity('');
             setCategory('');
             setStudentsEnrolled('');
-            setPrice(''); 
+            setPrice('');
 
             navigate('/professor/my-courses');
         } catch (err) {
             console.log(err);
-            
+
         } finally {
             setIsLoading(false);
         }
@@ -68,13 +68,14 @@ const CreateCourse = ({ createCourse }) => {
 
     return (
         <div className="ui middle aligned center aligned grid" style={{ height: '100vh' }}>
+            {loading && <Loading />}
             <div className="column" style={{ maxWidth: 450 }}>
                 <div className="ui card fluid">
                     <div className="content">
                         <form className="ui form" onSubmit={handleSubmit} noValidate>
                             <h2 className="ui header">Crear Curso</h2>
 
-                            {/* Campos existentes */}
+
                             <Input
                                 label='Título'
                                 type='text'
@@ -145,7 +146,7 @@ const CreateCourse = ({ createCourse }) => {
                             />
                             <FieldError message={fieldErrors.category} />
 
-                            {/* Nuevo campo precio */}
+
                             <Input
                                 label='Precio'
                                 type='number'

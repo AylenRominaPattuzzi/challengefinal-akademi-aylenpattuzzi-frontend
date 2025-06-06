@@ -5,14 +5,13 @@ import { validateForgotPassword } from '../../utils/ValidateForm';
 import Input from '../common/Input';
 import Button from '../common/Button';
 import FieldError from '../common/FieldError';
-import { Message } from '../common/Message';
 import Loading from '../common/Loading';
 
-const ForgotPassword = ({ user, forgotPassword }) => {
+const ForgotPassword = ({ user, forgotPassword, loading }) => {
     const [email, setEmail] = useState('');
     const [fieldErrors, setFieldErrors] = useState({});
 
-    // Limpia el campo email tras éxito
+
     useEffect(() => {
         if (user.forgotPasswordSuccess) {
             setEmail('');
@@ -36,6 +35,7 @@ const ForgotPassword = ({ user, forgotPassword }) => {
 
     return (
         <div className="ui middle aligned center aligned grid" style={{ height: '100vh' }}>
+            {loading && <Loading />}
             <div className="column" style={{ maxWidth: 450 }}>
                 <div className="ui card fluid">
                     <div className="content">
@@ -44,13 +44,6 @@ const ForgotPassword = ({ user, forgotPassword }) => {
 
                             {user.recoverPasswordError && (
                                 <div className="ui red message">{user.recoverPasswordError}</div>
-                            )}
-
-                            {user.recoverPasswordSuccess && (
-                                <Message
-                                    message="Revisa tu email para restablecer la contraseña."
-                                    stateMessage="positive"
-                                />
                             )}
 
                             <Input

@@ -4,6 +4,7 @@ import { getCourses } from '../../redux/actions/courseActions';
 import { enrollInCourse } from '../../redux/actions/enrollmentActions';
 import { useNavigate } from 'react-router-dom';
 import { CardCourse } from '../common/CardCourse';
+import Loading from '../common/Loading';
 
 const ListCourses = ({
   courses,
@@ -19,7 +20,6 @@ const ListCourses = ({
 }) => {
   const navigate = useNavigate();
 
-  // Estados para filtros y paginación
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
   const [price, setPrice] = useState('');
@@ -36,6 +36,7 @@ const ListCourses = ({
   const handleEnroll = (courseId) => {
     const enrollmentData = { studentId, courseId };
     enrollInCourse(enrollmentData);
+    navigate('/student/my-courses');
   };
 
   const isEnrolled = (courseId) => {
@@ -74,6 +75,7 @@ const ListCourses = ({
 
   return (
     <div className="ui container" style={{ paddingTop: '2rem' }}>
+      {loading && <Loading />}
       <h2 className="ui header">Cursos</h2>
 
       <div className="ui form" style={{ marginBottom: '1rem' }}>
@@ -137,7 +139,7 @@ const mapStateToProps = (state) => ({
   loading: state.course.operations.fetchCourses.loading,
   error: state.course.operations.fetchCourses.error,
   enrollments: state.enrollment.myEnrollments,
-  studentId: state.auth.user?._id, 
+  studentId: state.auth.user?._id,
   role: state.auth.role,
 });
 

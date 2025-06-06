@@ -6,8 +6,9 @@ import Input from '../common/Input';
 import Button from '../common/Button';
 import FieldError from '../common/FieldError';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../common/Loading';
 
-const RegisterUser = ({ addUser }) => {
+const RegisterUser = ({ addUser , loading}) => {
     const navigate = useNavigate();
 
     const [name, setName] = useState('');
@@ -70,6 +71,7 @@ const RegisterUser = ({ addUser }) => {
 
     return (
         <div className="ui middle aligned center aligned grid" style={{ height: '100vh' }}>
+                {loading && <Loading />}
             <div className="column" style={{ maxWidth: 450 }}>
                 <div className="ui card fluid">
                     <div className="content">

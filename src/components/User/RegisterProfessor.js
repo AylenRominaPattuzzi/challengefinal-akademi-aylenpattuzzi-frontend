@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { createProfessor } from '../../redux/actions/userActions';
-import { validateUser } from '../../utils/ValidateForm';
+import { validateProfessor } from '../../utils/ValidateForm';
 import Input from '../common/Input';
 import Button from '../common/Button';
 import FieldError from '../common/FieldError';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../common/Loading';
 
-const RegisterProfessor = ({ createProfessor }) => {
+const RegisterProfessor = ({ createProfessor, loading }) => {
     const navigate = useNavigate();
 
     const [name, setName] = useState('');
@@ -23,7 +24,7 @@ const RegisterProfessor = ({ createProfessor }) => {
         e.preventDefault();
         if (isLoading) return;
 
-        const errors = validateUser({ name, email, password, specialty });
+        const errors = validateProfessor({ name, email, password, specialty, documentNumber, birthDate });
         if (Object.keys(errors).length > 0) {
             setFieldErrors(errors);
             return;
@@ -53,7 +54,7 @@ const RegisterProfessor = ({ createProfessor }) => {
             navigate('/login');
         } catch (err) {
             console.log(err);
-            
+
         } finally {
             setIsLoading(false);
         }
@@ -61,6 +62,7 @@ const RegisterProfessor = ({ createProfessor }) => {
 
     return (
         <div className="ui middle aligned center aligned grid" style={{ height: '100vh' }}>
+            {loading && <Loading />}
             <div className="column" style={{ maxWidth: 450 }}>
                 <div className="ui card fluid">
                     <div className="content">
@@ -133,6 +135,8 @@ const RegisterProfessor = ({ createProfessor }) => {
                                 value={birthDate}
                                 onChange={(e) => setBirthDate(e.target.value)}
                             />
+                            <FieldError message={fieldErrors.birthDate} />
+
 
                             <Button
                                 type="submit"

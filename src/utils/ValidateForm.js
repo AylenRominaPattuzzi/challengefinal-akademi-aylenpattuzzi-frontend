@@ -1,4 +1,4 @@
-// Validación de Login
+
 export const validateLogin = ({ email, password }) => {
   const errors = {};
 
@@ -15,7 +15,6 @@ export const validateLogin = ({ email, password }) => {
   return errors;
 };
 
-// Validación de "Olvidé mi contraseña"
 export const validateForgotPassword = ({ email }) => {
   const errors = {};
 
@@ -28,7 +27,7 @@ export const validateForgotPassword = ({ email }) => {
   return errors;
 };
 
-// Validación de cambio de contraseña
+
 export const validateResetPassword = ({ password }) => {
   const errors = {};
 
@@ -41,7 +40,7 @@ export const validateResetPassword = ({ password }) => {
   return errors;
 };
 
-// Validación de usuario
+
 export const validateUser = ({ name, email, password, specialty } = {}) => {
   const errors = {};
 
@@ -58,25 +57,23 @@ export const validateUser = ({ name, email, password, specialty } = {}) => {
   if (password && password.length < 8) {
     errors.password = 'La contraseña debe tener al menos 8 caracteres';
   }
-
-  return errors;
-};
-export const validateProfessor = ({ name, email, password, specialty } = {}) => {
-  const errors = validateUser({ name, email, password, specialty }) || {};
-
-  if (!specialty || specialty.trim() === '') {
-    errors.specialty = 'La especialidad es obligatoria';
+  if (!password || password.trim() === '') {
+    errors.password = 'La contraseña es obligatoria';
   }
 
   return errors;
+};
 
-}
-// Validación de curso
-export const validateCourse = ({ title, startDate, endDate, capacity, category }) => {
+
+export const validateCourse = ({ title, startDate, endDate, capacity, category, price}) => {
   const errors = {};
 
   if (!title || title.trim() === '') {
     errors.title = 'El título es obligatorio';
+  }
+
+  if (!price || isNaN(price) || parseFloat(price) <= 0) {
+    errors.price = 'El precio debe ser un número mayor a cero';
   }
 
   if (!startDate) {
@@ -93,6 +90,32 @@ export const validateCourse = ({ title, startDate, endDate, capacity, category }
 
   if (!category || category.trim() === '') {
     errors.category = 'La categoría es obligatoria';
+  }
+
+  return errors;
+};
+
+export const validateProfessor = ({ name, email, password, specialty, documentNumber, birthDate } = {}) => {
+  const errors = validateUser({ name, email, password }) || {};
+
+  if (!specialty || specialty.trim() === '') {
+    errors.specialty = 'La especialidad es obligatoria';
+  }
+
+  if (!documentNumber || documentNumber.trim() === '') {
+    errors.documentNumber = 'El número de documento es obligatorio';
+  } else if (!/^\d+$/.test(documentNumber.trim())) {
+    errors.documentNumber = 'El número de documento debe contener solo números';
+  }
+
+  if (!birthDate) {
+    errors.birthDate = 'La fecha de nacimiento es obligatoria';
+  } else {
+    const birth = new Date(birthDate);
+    const now = new Date();
+    if (birth >= now) {
+      errors.birthDate = 'La fecha de nacimiento debe ser anterior a hoy';
+    }
   }
 
   return errors;

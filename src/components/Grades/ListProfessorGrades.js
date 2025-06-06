@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchGradesByCourse, createGrade, updateGrade } from '../../redux/actions/gradeActions';
-import { useNavigate, useParams } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
 import GradeModal from '../common/GradeModal';
 import Modal from '../common/Modal'; 
 import { toast } from 'react-toastify';

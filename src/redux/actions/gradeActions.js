@@ -46,11 +46,24 @@ export const updateGrade = (id, gradeData) => async (dispatch) => {
   }
 };
 
-export const fetchGradesByStudent = () => async (dispatch) => {
+export const fetchGradesByStudent = ({ page = 1, search = '', value = '' } = {}) => async (dispatch) => {
+
   dispatch({ type: FETCH_GRADES_BY_STUDENT_REQUEST });
   try {
-    const response = await axiosInstance.get(`/grades/student`);
-    dispatch({ type: FETCH_GRADES_BY_STUDENT_SUCCESS, payload: response.data });
+    const params = {};
+    if (page) params.page = page;
+    if (value) params.value = value;
+    if (search) params.search = search;
+
+    const response = await axiosInstance.get(`/grades/student`, { params });
+    const payload = {
+      grades: response.data.data,
+      total: response.data.total,
+      page: response.data.page,
+      limit: response.data.limit,
+      totalPages: response.data.totalPages,
+    }
+    dispatch({ type: FETCH_GRADES_BY_STUDENT_SUCCESS, payload });
   } catch (error) {
     dispatch({
       type: FETCH_GRADES_BY_STUDENT_FAILURE,
@@ -59,11 +72,22 @@ export const fetchGradesByStudent = () => async (dispatch) => {
   }
 };
 
-export const fetchStudentsWithCoursesByProfessor = (professorId) => async (dispatch) => {
+export const fetchStudentsWithCoursesByProfessor = ({professorId, page = 1, search = '', value = '' } = {}) => async (dispatch) => {
   dispatch({ type: FETCH_STUDENTS_WITH_COURSES_REQUEST });
   try {
-    const response = await axiosInstance.get(`/grades/professor/${professorId}`);
-    dispatch({ type: FETCH_STUDENTS_WITH_COURSES_SUCCESS, payload: response.data });
+    const params = {};
+    if (page) params.page = page;
+    if (value) params.value = value;
+    if (search) params.search = search;
+    const response = await axiosInstance.get(`/grades/professor/${professorId}`, { params });
+    const payload = {
+      grades: response.data.data,
+      total: response.data.total,
+      page: response.data.page,
+      limit: response.data.limit,
+      totalPages: response.data.totalPages,
+    }
+    dispatch({ type: FETCH_STUDENTS_WITH_COURSES_SUCCESS, payload });
   } catch (error) {
     dispatch({
       type: FETCH_STUDENTS_WITH_COURSES_FAILURE,
@@ -79,7 +103,7 @@ export const fetchGradesByCourse = (courseId) => async (dispatch) => {
     console.log('API Response fetchGradesByCourse:', response.data);
     dispatch({
       type: FETCH_GRADES_BY_COURSE_SUCCESS,
-      payload: response.data, 
+      payload: response.data,
     });
   } catch (error) {
     dispatch({

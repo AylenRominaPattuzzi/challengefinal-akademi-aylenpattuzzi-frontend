@@ -5,23 +5,28 @@ import { cancelEnrollment } from '../../redux/actions/enrollmentActions';
 import { useNavigate } from 'react-router-dom';
 import { CardCourse } from '../common/CardCourse';
 import Modal from '../common/Modal';
+import Loading from '../common/Loading';
 
 const ListStudentCourses = ({
   courses,
   getCoursesByStudent,
   cancelEnrollment,
   loading,
-  error
+  error,
+  totalPages = 1,
+  currentPage
 }) => {
-  console.log(courses);
-
   const navigate = useNavigate();
+  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('');
+  const [page, setPage] = useState(currentPage || 1);
+
   const [showModal, setShowModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
 
   useEffect(() => {
-    getCoursesByStudent();
-  }, [getCoursesByStudent]);
+    getCoursesByStudent({ search, category, page });
+  }, [getCoursesByStudent, search, category, page]);
 
   const handleViewCourse = (id) => {
     navigate(`/course-detail/${id}`);
@@ -33,16 +38,29 @@ const ListStudentCourses = ({
   };
 
   const handleCancelEnrollment = async () => {
-    console.log(1);
-
     if (selectedCourse?.enrollmentId) {
-      console.log(2);
-
       await cancelEnrollment(selectedCourse.enrollmentId);
-      await getCoursesByStudent();
+      await getCoursesByStudent({ search, category, page });
     }
     setShowModal(false);
     setSelectedCourse(null);
+  };
+
+  const renderPagination = () => {
+    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+    return (
+      <div className="ui pagination menu">
+        {pages.map((p) => (
+          <button
+            key={p}
+            className={`item ${p === page ? 'active' : ''}`}
+            onClick={() => setPage(p)}
+          >
+            {p}
+          </button>
+        ))}
+      </div>
+    );
   };
 
   if (loading) {
@@ -58,31 +76,66 @@ const ListStudentCourses = ({
     );
   }
 
-  if (!courses || courses.length === 0) {
-    return <div className="ui message info">No estás inscripto en ningún curso.</div>;
-  }
-
   return (
     <div className="ui container" style={{ paddingTop: '2rem' }}>
+      {loading && <Loading />}
       <h2 className="ui header">Mis cursos</h2>
-      <div className="ui three stackable cards">
-        {courses.map((course) => (
-          <CardCourse
-            key={course._id}
-            course={course}
-            onView={handleViewCourse}
-            isEnrolled={true}
-            onUnenroll={() => handleOpenModal(course)}
-            hideDetailButton={true}
-          />
-        ))}
+
+      <div className="ui form" style={{ marginBottom: '1rem' }}>
+        <div className="fields">
+          <div className="field">
+            <input
+              type="text"
+              placeholder="Buscar curso..."
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
+            />
+          </div>
+          <div className="field">
+            <select
+              className="ui dropdown"
+              value={category}
+              onChange={(e) => {
+                setCategory(e.target.value);
+                setPage(1);
+              }}
+            >
+              <option value="">Todas las categorías</option>
+              <option value="backend">BACKEND</option>
+              <option value="frontend">FRONTEND</option>
+            </select>
+          </div>
+        </div>
       </div>
+
+      {(!courses || courses.length === 0) ? (
+        <div className="ui message info">No estás inscripto en ningún curso.</div>
+      ) : (
+        <>
+          <div className="ui three stackable cards">
+            {courses.map((course) => (
+              <CardCourse
+                key={course._id}
+                course={course}
+                onView={handleViewCourse}
+                isEnrolled={true}
+                onUnenroll={() => handleOpenModal(course)}
+                hideDetailButton={true}
+              />
+            ))}
+          </div>
+          {totalPages > 1 && renderPagination()}
+        </>
+      )}
 
       {showModal && selectedCourse && (
         <Modal
           productName={selectedCourse.title}
           modalTitle="¿Desinscribirse del curso?"
-          modalDescription="¿Estás seguro de que deseas desinscribirte del curso"
+          modalDescription="¿Estás seguro de que deseas desinscribirte del curso?"
           onCancel={() => setShowModal(false)}
           onConfirm={handleCancelEnrollment}
         />
@@ -93,6 +146,8 @@ const ListStudentCourses = ({
 
 const mapStateToProps = (state) => ({
   courses: state.course.courses,
+  totalPages: state.course.totalPages,
+  currentPage: state.course.currentPage,
   loading: state.course.operations.fetchCoursesByStudent?.loading,
   error: state.course.operations.fetchCoursesByStudent?.error,
 });

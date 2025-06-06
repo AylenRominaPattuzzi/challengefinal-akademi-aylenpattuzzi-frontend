@@ -1,11 +1,12 @@
 import React from 'react';
-import './Loading.css';
+
 
 const Loading = () => {
   return (
-    <div className="custom-loading-overlay">
-      <div className="spinner"></div>
-      <p className="loading-text">Loading...</p>
+    <div className="ui segment">
+      <div className="ui active inverted dimmer">
+        <div className="ui large text loader">Loading</div>
+      </div>
     </div>
   );
 };

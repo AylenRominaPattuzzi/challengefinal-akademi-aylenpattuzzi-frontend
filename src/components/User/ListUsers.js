@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchUsers, deleteUser } from '../../redux/actions/userActions';
 import { useNavigate } from 'react-router-dom';
+import Modal from '../common/Modal';
+import Loading from '../common/Loading';
 
 const ListUsers = ({
     users,
@@ -11,21 +13,35 @@ const ListUsers = ({
     currentPage,
     isDeletingUser,
     errorUsers,
+    loading
 }) => {
     const navigate = useNavigate();
     const [page, setPage] = useState(currentPage || 1);
     const [role, setRole] = useState('');
-    const [search, setSearch] = useState('')
+    const [search, setSearch] = useState('');
+
+    const [showModal, setShowModal] = useState(false);
+    const [userToDelete, setUserToDelete] = useState(null);
 
     useEffect(() => {
         fetchUsers({ page, role, search });
     }, [fetchUsers, page, role, search]);
 
+    const handleDeleteClick = (user) => {
+        setUserToDelete(user);
+        setShowModal(true);
+    };
 
-    const handleDeleteUser = (id) => {
-        if (window.confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
-            deleteUser(id);
+    const confirmDelete = () => {
+        if (userToDelete) {
+            deleteUser(userToDelete._id);
+            setShowModal(false);
         }
+    };
+
+    const cancelDelete = () => {
+        setShowModal(false);
+        setUserToDelete(null);
     };
 
     const handleEditUser = (id) => {
@@ -51,6 +67,7 @@ const ListUsers = ({
 
     return (
         <div className="ui middle aligned center aligned grid" style={{ paddingTop: '2rem' }}>
+            {loading && <Loading />}
             <div className="column" style={{ maxWidth: '90%' }}>
                 <div className="ui card fluid">
                     <div className="content">
@@ -73,22 +90,19 @@ const ListUsers = ({
                                         <option value="professor">PROFESOR</option>
                                     </select>
                                 </div>
-                                <div className='field'>
-                                    <div className="field">
-                                        <input
-                                            type="text"
-                                            placeholder="Buscar usuario..."
-                                            value={search}
-                                            onChange={(e) => {
-                                                setSearch(e.target.value);
-                                                setPage(1);
-                                            }}
-                                        />
-                                    </div>
+                                <div className="field">
+                                    <input
+                                        type="text"
+                                        placeholder="Buscar usuario..."
+                                        value={search}
+                                        onChange={(e) => {
+                                            setSearch(e.target.value);
+                                            setPage(1);
+                                        }}
+                                    />
                                 </div>
                             </div>
                         </div>
-
 
                         {errorUsers && (
                             <div className="ui negative message">
@@ -122,10 +136,15 @@ const ListUsers = ({
                                                     : '-'}
                                             </td>
                                             <td>
-                                                <button className="ui mini primary button" onClick={() => handleEditUser(user._id)}>Detalle</button>
+                                                <button
+                                                    className="ui mini primary button"
+                                                    onClick={() => handleEditUser(user._id)}
+                                                >
+                                                    Detalle
+                                                </button>
                                                 <button
                                                     className={`ui mini negative button ${isDeletingUser ? 'loading disabled' : ''}`}
-                                                    onClick={() => handleDeleteUser(user._id)}
+                                                    onClick={() => handleDeleteClick(user)}
                                                 >
                                                     Eliminar
                                                 </button>
@@ -146,7 +165,17 @@ const ListUsers = ({
                     </div>
                 </div>
             </div>
-        </div >
+
+            {showModal && userToDelete && (
+                <Modal
+                    modalTitle="Confirmar eliminación"
+                    modalDescription="¿Estás seguro de que deseas eliminar al usuario"
+                    productName={userToDelete.name}
+                    onConfirm={confirmDelete}
+                    onCancel={cancelDelete}
+                />
+            )}
+        </div>
     );
 };
 
@@ -163,8 +192,4 @@ const mapDispatchToProps = {
     deleteUser,
 };
 
-
 export default connect(mapStateToProps, mapDispatchToProps)(ListUsers);
-
-
-

@@ -29,7 +29,7 @@ const initialState = {
         createCourse: { loading: false, error: null, success: false },
         fetchCourses: { loading: false, error: null, success: false },
         fetchCoursesByProfessor: { loading: false, error: null, success: false },
-        fetchCoursesByStudent: { loading: false, error: null, success: false }, 
+        fetchCoursesByStudent: { loading: false, error: null, success: false },
         fetchCourseById: { loading: false, error: null, success: false },
         updateCourse: { loading: false, error: null, success: false },
         deleteCourse: { loading: false, error: null, success: false },
@@ -38,7 +38,7 @@ const initialState = {
 
 export default function courseReducer(state = initialState, action) {
     switch (action.type) {
-        // CREATE
+
         case CREATE_COURSE_REQUEST:
             return {
                 ...state,

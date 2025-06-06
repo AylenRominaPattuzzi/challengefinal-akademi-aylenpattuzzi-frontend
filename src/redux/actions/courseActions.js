@@ -36,16 +36,15 @@ export const createCourse = (courseData) => async (dispatch) => {
 };
 
 // Listar cursos de profesor
-export const getCoursesByProfessor = ({ page = 1, search = '', category = '', price = '' } = {}) => async (dispatch) => {
+export const getCoursesByProfessor = ({ page = 1, search = '', category = '' } = {}) => async (dispatch) => {
   dispatch({ type: FETCH_COURSES_BY_PROFESSOR_REQUEST });
   try {
     const params = {};
     if (page) params.page = page;
-    if (category) params.page = category;
-    if (price) params.page = price;
+    if (category) params.category = category;
     if (search) params.search = search;
 
-    const response = await axiosInstance.get('/courses/professor');
+    const response = await axiosInstance.get('/courses/professor', {params});
     const payload = {
       courses: response.data.data,
       total: response.data.total,
@@ -59,17 +58,16 @@ export const getCoursesByProfessor = ({ page = 1, search = '', category = '', pr
   }
 };
 
-export const getCoursesByStudent = ({ page = 1, search = '', category = '', price = '' } = {}) => async (dispatch) => {
+export const getCoursesByStudent = ({ page = 1, search = '', category = '' } = {}) => async (dispatch) => {
 
   dispatch({ type: FETCH_COURSES_BY_STUDENT_REQUEST });
   try {
     const params = {};
     if (page) params.page = page;
-    if (category) params.page = category;
-    if (price) params.page = price;
+    if (category) params.category = category;
     if (search) params.search = search;
 
-    const response = await axiosInstance.get('/enrollments/my-courses');
+    const response = await axiosInstance.get('/enrollments/my-courses', {params});
     const payload = {
       courses: response.data.data,
       total: response.data.total,

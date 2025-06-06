@@ -5,15 +5,15 @@ import { createGrade, fetchStudentsWithCoursesByProfessor } from '../../redux/ac
 import Input from '../common/Input';
 import Button from '../common/Button';
 import FieldError from '../common/FieldError';
-import { Message } from '../common/Message';
+import Loading from '../common/Loading';
 
 const CreateGrade = ({ 
   createGrade, 
   fetchStudentsWithCoursesByProfessor, 
   studentsWithCourses, 
   isCreatingGrade, 
-  errorCreatingGrade, 
-  professorId 
+  professorId ,
+  loading
 }) => {
   const { studentId } = useParams();
   const navigate = useNavigate();
@@ -60,7 +60,7 @@ const CreateGrade = ({
         navigate('/professor/students');
       }, 2000);
     } catch (error) {
-      // Error ya se maneja en redux
+  
     }
   };
 
@@ -70,11 +70,7 @@ const CreateGrade = ({
 
   return (
     <div className="ui segment">
-
-      {errorCreatingGrade && (
-        <Message message={errorCreatingGrade} stateMessage="negative" />
-      )}
-
+          {loading && <Loading/>}
       <div className="ui middle aligned center aligned grid" style={{ height: '100vh' }}>
         <div className="column" style={{ maxWidth: 500 }}>
           <div className={`ui card fluid ${isCreatingGrade ? 'loading' : ''}`}>

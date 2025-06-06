@@ -101,7 +101,9 @@ export default function gradeReducer(state = initialState, action) {
     case FETCH_GRADES_BY_STUDENT_SUCCESS:
       return {
         ...state,
-        grades: action.payload,
+        grades: action.payload.grades,
+        totalPages: action.payload.totalPages,
+        currentPage: action.payload.page,
         operations: {
           ...state.operations,
           fetchGradesByStudent: { loading: false, error: null, success: true },
@@ -126,6 +128,9 @@ export default function gradeReducer(state = initialState, action) {
     case FETCH_STUDENTS_WITH_COURSES_SUCCESS:
       return {
         ...state,
+        grades: action.payload.grades,
+        totalPages: action.payload.totalPages,
+        currentPage: action.payload.page,
         studentsWithCourses: action.payload,
         operations: {
           ...state.operations,

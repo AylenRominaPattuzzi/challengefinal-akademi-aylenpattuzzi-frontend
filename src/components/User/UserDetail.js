@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { fetchUsers, editUser } from '../../redux/actions/userActions';
 import { useNavigate, useParams } from 'react-router-dom';
 import { validateUser } from '../../utils/ValidateForm';
-import { Message } from '../common/Message';
 import FieldError from '../common/FieldError';
 import Input from '../common/Input';
 import Button from '../common/Button';
 import Modal from '../common/Modal';
+import Loading from '../common/Loading';
 
 const UserDetail = ({
   users,
@@ -26,10 +26,8 @@ const UserDetail = ({
   const [dni, setDni] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [fieldErrors, setFieldErrors] = useState({});
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [open, setOpen] = useState(false);
-
 
   const user = users.find(u => u._id === id);
 
@@ -46,19 +44,6 @@ const UserDetail = ({
       setBirthDate(user.profile?.birthDate?.substring(0, 10) || '');
     }
   }, [user]);
-
-
-  useEffect(() => {
-    if (!isEditingUser && showSuccessMessage === false && !errorEditUser) {
-      setShowSuccessMessage(true);
-      setDisabled(true);
-      const timer = setTimeout(() => {
-        setShowSuccessMessage(false);
-        navigate('/list-users');
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [isEditingUser, errorEditUser, navigate, showSuccessMessage]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,29 +72,15 @@ const UserDetail = ({
     }
   };
 
-
   const handleCancelEdit = () => {
-    if (user) {
-      setName(user.name || '');
-      setEmail(user.email || '');
-      setRole(user.role || '');
-      setDni(user.profile?.documentNumber || '');
-      setBirthDate(user.profile?.birthDate?.substring(0, 10) || '');
-    }
+    navigate('/list-users');
     setDisabled(true);
     setOpen(false);
   };
 
   return (
     <div className="ui segment">
-      {showSuccessMessage && (
-        <Message message="Usuario editado con éxito" stateMessage="positive" />
-      )}
-
-      {errorEditUser && (
-        <Message message={errorEditUser} stateMessage="negative" />
-      )}
-
+      {isLoadingUsers && <Loading />}
       <div className="ui middle aligned center aligned grid" style={{ height: '100vh' }}>
         <div className="column" style={{ maxWidth: 450 }}>
           <div className="ui card fluid">
@@ -147,18 +118,6 @@ const UserDetail = ({
                 />
                 <FieldError message={fieldErrors.email} />
 
-                <Input
-                  label="Rol"
-                  type="text"
-                  value={role}
-                  onChange={(e) => {
-                    setRole(e.target.value);
-                    setFieldErrors(prev => ({ ...prev, role: '' }));
-                  }}
-                  disabled={disabled}
-                  placeholder="Ingrese el rol del usuario"
-                />
-                <FieldError message={fieldErrors.role} />
 
                 {role === 'student' && (
                   <>

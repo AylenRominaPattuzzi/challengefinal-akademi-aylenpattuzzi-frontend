@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { resetPassword } from '../../redux/actions/userActions';
 import { validateResetPassword } from '../../utils/ValidateForm';
 import Input from '../common/Input';
-import { Message } from '../common/Message';
 import FieldError from '../common/FieldError';
 import Button from '../common/Button';
+import Loading from '../common/Loading';
 
-const ResetPassword = ({ auth, resetPassword }) => {
+const ResetPassword = ({ auth, resetPassword, loading }) => {
   const { token } = useParams();
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
@@ -35,18 +35,12 @@ const ResetPassword = ({ auth, resetPassword }) => {
 
   return (
     <div className="ui middle aligned center aligned grid" style={{ height: '100vh' }}>
+          {loading && <Loading />}
       <div className="column" style={{ maxWidth: 450 }}>
         <div className="ui card fluid">
           <div className="content">
             <form className="ui form" onSubmit={handleSubmit}>
               <h2 className="ui header">Restablecer contraseña</h2>
-
-              {success && (
-                <Message
-                  tipo="success"
-                  texto="Contraseña actualizada correctamente. Redirigiendo al login..."
-                />
-              )}
 
               <Input
                 label="Nueva contraseña"

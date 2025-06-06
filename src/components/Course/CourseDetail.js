@@ -6,8 +6,8 @@ import { validateCourse } from '../../utils/ValidateForm';
 import Input from '../common/Input';
 import FieldError from '../common/FieldError';
 import Button from '../common/Button';
-import { Message } from '../common/Message';
 import Modal from '../common/Modal';
+import Loading from '../common/Loading';
 
 const CourseDetail = ({
   course,
@@ -15,7 +15,6 @@ const CourseDetail = ({
   updateCourse,
   isLoadingCourse,
   isUpdatingCourse,
-  errorUpdatingCourse,
 }) => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -29,7 +28,6 @@ const CourseDetail = ({
   const [price, setPrice] = useState('');  
   const [fieldErrors, setFieldErrors] = useState({});
   const [disabled, setDisabled] = useState(true);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [openCancelModal, setOpenCancelModal] = useState(false);
 
   useEffect(() => {
@@ -50,20 +48,6 @@ const CourseDetail = ({
     }
   }, [course]);
 
-  useEffect(() => {
-    if (!isUpdatingCourse && showSuccessMessage === false && !errorUpdatingCourse) {
-      if (!disabled) {
-        setShowSuccessMessage(true);
-        setDisabled(true);
-        const timer = setTimeout(() => {
-          setShowSuccessMessage(false);
-          navigate('/professor/my-courses');
-        }, 2000);
-        return () => clearTimeout(timer);
-      }
-    }
-  }, [isUpdatingCourse, errorUpdatingCourse, showSuccessMessage, disabled, navigate]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -79,7 +63,6 @@ const CourseDetail = ({
 
     const errors = validateCourse(updatedData);
 
-  
     if (!price || isNaN(price) || parseFloat(price) < 0) {
       errors.price = 'Precio inválido';
     }
@@ -93,28 +76,15 @@ const CourseDetail = ({
 
     try {
       await updateCourse(id, updatedData);
-      setShowSuccessMessage(true);
       setDisabled(true);
-
-      setTimeout(() => {
-        setShowSuccessMessage(false);
-        navigate('/professor/');
-      }, 2000);
+      navigate('/professor/my-courses');
     } catch (err) {
-
+   
     }
   };
 
   const handleCancelEdit = () => {
-    if (course) {
-      setTitle(course.title || '');
-      setDescription(course.description || '');
-      setStartDate(course.startDate?.substring(0, 10) || '');
-      setEndDate(course.endDate?.substring(0, 10) || '');
-      setCapacity(course.capacity ?? '');
-      setCategory(course.category || '');
-      setPrice(course.price ?? '');  
-    }
+    navigate('/list-courses');
     setDisabled(true);
     setOpenCancelModal(false);
   };
@@ -122,6 +92,7 @@ const CourseDetail = ({
   return (
     <div className="ui segment">
       <div className="ui middle aligned center aligned grid" style={{ height: '100vh' }}>
+      {isLoadingCourse && <Loading />}
         <div className="column" style={{ maxWidth: 500 }}>
           <div className={`ui card fluid ${isLoadingCourse || isUpdatingCourse ? 'loading' : ''}`}>
             <div className="content">
