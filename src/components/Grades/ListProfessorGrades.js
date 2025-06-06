@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchGradesByCourse, createGrade, updateGrade } from '../../redux/actions/gradeActions';
-import {  useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import GradeModal from '../common/GradeModal';
-import Modal from '../common/Modal'; 
+import Modal from '../common/Modal';
 import { toast } from 'react-toastify';
 import Loading from '../common/Loading';
 
@@ -13,6 +13,8 @@ const ListProfessorGrades = ({
   fetchGradesByCourse,
   createGrade,
   updateGrade,
+  totalPages,
+  currentPage,
   loading,
   error,
 }) => {
@@ -22,12 +24,13 @@ const ListProfessorGrades = ({
   const [editingGrade, setEditingGrade] = useState(null);
   const [newGrade, setNewGrade] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [page, setPage] = useState(currentPage || 1);
 
   useEffect(() => {
     if (courseId) {
-      fetchGradesByCourse(courseId);
+      fetchGradesByCourse(courseId, page);
     }
-  }, [courseId, fetchGradesByCourse]);
+  }, [courseId, page, fetchGradesByCourse]);
 
   const handleAddGradeClick = (student) => {
     setAddingGradeFor(student);
@@ -55,7 +58,7 @@ const ListProfessorGrades = ({
       });
       setAddingGradeFor(null);
       setNewGrade('');
-      fetchGradesByCourse(courseId);
+      fetchGradesByCourse(courseId, page);
     } catch (err) {
       console.error(err);
     }
@@ -78,10 +81,28 @@ const ListProfessorGrades = ({
       setEditingGrade(null);
       setNewGrade('');
       setShowConfirmModal(false);
-      fetchGradesByCourse(courseId);
+      fetchGradesByCourse(courseId, page);
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const renderPagination = () => {
+    if (!totalPages || totalPages <= 1) return null;
+    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+    return (
+      <div className="ui pagination menu">
+        {pages.map((p) => (
+          <button
+            key={p}
+            className={`item ${p === page ? 'active' : ''}`}
+            onClick={() => setPage(p)}
+          >
+            {p}
+          </button>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -174,6 +195,8 @@ const ListProfessorGrades = ({
                 )}
               </tbody>
             </table>
+
+            {totalPages > 1 && renderPagination()}
           </div>
         </div>
       </div>
@@ -214,6 +237,7 @@ const ListProfessorGrades = ({
 const mapStateToProps = (state) => ({
   grades: state.grade.gradesByCourse?.grades ?? [],
   extraStudents: state.grade.gradesByCourse?.extraStudents ?? [],
+  totalPages: state.grade.gradesByCourse?.totalPages ?? 1, 
   loading: state.grade.operations.fetchGradesByCourse?.loading,
   error: state.grade.operations.fetchGradesByCourse?.error,
 });
