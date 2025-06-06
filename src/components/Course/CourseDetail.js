@@ -25,13 +25,13 @@ const CourseDetail = ({
   const [endDate, setEndDate] = useState('');
   const [capacity, setCapacity] = useState('');
   const [category, setCategory] = useState('');
-  const [price, setPrice] = useState('');  
+  const [price, setPrice] = useState('');
   const [fieldErrors, setFieldErrors] = useState({});
   const [disabled, setDisabled] = useState(true);
   const [openCancelModal, setOpenCancelModal] = useState(false);
 
   useEffect(() => {
-      getCourseById(id);
+    getCourseById(id);
   }, [getCourseById, id]);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const CourseDetail = ({
       setEndDate(course.endDate?.substring(0, 10) || '');
       setCapacity(course.capacity ?? '');
       setCategory(course.category || '');
-      setPrice(course.price ?? '');  
+      setPrice(course.price ?? '');
     }
   }, [course]);
 
@@ -56,7 +56,7 @@ const CourseDetail = ({
       endDate,
       capacity: parseInt(capacity, 10),
       category,
-      price: parseFloat(price), 
+      price: parseFloat(price),
     };
 
     const errors = validateCourse(updatedData);
@@ -75,9 +75,15 @@ const CourseDetail = ({
     try {
       await updateCourse(id, updatedData);
       setDisabled(true);
-      navigate('/professor/my-courses');
+      const role = localStorage.getItem("role")
+      if (role === 'superadmin') {
+        navigate('/list-courses');
+      } else {
+        navigate('/professor/my-courses');
+      }
+
     } catch (err) {
-   
+
     }
   };
 
@@ -90,7 +96,7 @@ const CourseDetail = ({
   return (
     <div className="ui segment">
       <div className="ui middle aligned center aligned grid" style={{ height: '100vh' }}>
-      {isLoadingCourse && <Loading />}
+        {isLoadingCourse && <Loading />}
         <div className="column" style={{ maxWidth: 500 }}>
           <div className={`ui card fluid ${isLoadingCourse || isUpdatingCourse ? 'loading' : ''}`}>
             <div className="content">
