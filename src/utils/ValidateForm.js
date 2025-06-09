@@ -42,7 +42,7 @@ export const validateResetPassword = ({ password }) => {
 };
 
 
-export const validateUser = ({ name, email, password, documentNumber, birthDate } = {}) => {
+export const validateUser = ({ name, email, documentNumber, birthDate } = {}) => {
   const errors = {};
 
   if (!name || name.trim() === '') {
@@ -55,12 +55,6 @@ export const validateUser = ({ name, email, password, documentNumber, birthDate 
     errors.email = 'El correo electrónico no es válido';
   }
 
-  if (password && password.length < 8) {
-    errors.password = 'La contraseña debe tener al menos 8 caracteres';
-  }
-  if (!password || password.trim() === '') {
-    errors.password = 'La contraseña es obligatoria';
-  }
   if (!documentNumber || documentNumber.trim() === '') {
     errors.documentNumber = 'El número de documento es obligatorio';
   } else if (!/^\d+$/.test(documentNumber.trim())) {
@@ -113,27 +107,17 @@ export const validateCourse = ({ title, startDate, endDate, capacity, category, 
 };
 
 export const validateProfessor = ({ name, email, password, specialty, documentNumber, birthDate } = {}) => {
-  const errors = validateUser({ name, email, password }) || {};
-
+  const errors = validateUser({ name, email, documentNumber, birthDate }) || {};
+  if (password && password.length < 8) {
+    errors.password = 'La contraseña debe tener al menos 8 caracteres';
+  }
+  if (!password || password.trim() === '') {
+    errors.password = 'La contraseña es obligatoria';
+  }
   if (!specialty || specialty.trim() === '') {
     errors.specialty = 'La especialidad es obligatoria';
   }
 
-  if (!documentNumber || documentNumber.trim() === '') {
-    errors.documentNumber = 'El número de documento es obligatorio';
-  } else if (!/^\d+$/.test(documentNumber.trim())) {
-    errors.documentNumber = 'El número de documento debe contener solo números';
-  }
-
-  if (!birthDate) {
-    errors.birthDate = 'La fecha de nacimiento es obligatoria';
-  } else {
-    const birth = new Date(birthDate);
-    const now = new Date();
-    if (birth >= now) {
-      errors.birthDate = 'La fecha de nacimiento debe ser anterior a hoy';
-    }
-  }
 
   return errors;
 };

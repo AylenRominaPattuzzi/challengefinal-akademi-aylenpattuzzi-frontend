@@ -14,7 +14,7 @@ const CourseDetail = ({
   getCourseById,
   updateCourse,
   isLoadingCourse,
-  isUpdatingCourse,
+  isUpdatingCourse
 }) => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -61,9 +61,9 @@ const CourseDetail = ({
 
     const errors = validateCourse(updatedData);
 
-    if (!price || isNaN(price) || parseFloat(price) < 0) {
-      errors.price = 'Precio inválido';
-    }
+    // if (!price || isNaN(price) || parseFloat(price) < 0) {
+    //   errors.price = 'Precio inválido';
+    // }
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
@@ -213,7 +213,8 @@ const CourseDetail = ({
           onCancel={() => setOpenCancelModal(false)}
           onConfirm={handleCancelEdit}
           modalTitle="Cancelar edición"
-          modalDescription={`¿Estás seguro de cancelar la edición del curso "${title}"?`}
+          productName={course.title}
+          modalDescription={`¿Estás seguro de cancelar la edición del curso`}
         />
       )}
     </div>

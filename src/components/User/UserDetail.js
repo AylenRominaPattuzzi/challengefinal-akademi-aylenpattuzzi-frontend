@@ -58,7 +58,9 @@ const UserDetail = ({
       }
     };
 
-    const errors = validateUser(updatedUser);
+    const errors = validateUser({...updatedUser, birthDate: updatedUser.profile.birthDate, documentNumber: updatedUser.profile.documentNumber});
+    console.log(errors);
+    
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;

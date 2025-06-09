@@ -25,7 +25,14 @@ const RegisterUser = ({ addUser, loading }) => {
         if (isLoading) return;
         console.log("loading");
 
-        const errors = validateUser({ name, email, password, documentNumber, birthDate });
+        const errors = validateUser({ name, email, documentNumber, birthDate });
+
+        if (password && password.length < 8) {
+            errors.password = 'La contraseña debe tener al menos 8 caracteres';
+          }
+          if (!password || password.trim() === '') {
+            errors.password = 'La contraseña es obligatoria';
+          }
 
         if (Object.keys(errors).length > 0) {
             console.log(errors);
